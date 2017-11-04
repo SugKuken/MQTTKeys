@@ -9,12 +9,14 @@ namespace mqtt_hotkeys_test.Windows
     /// </summary>
     public partial class ConfigPanel : Window
     {
-        public string MqttIp;
-        public string Username;
-        public string Password;
+        public ConnectionSettings ConnSettings;
+        private MainWindow _parent;
 
-        public ConfigPanel()
+
+        public ConfigPanel(MainWindow parent)
         {
+            ConnSettings = new ConnectionSettings();
+            _parent = parent;
             InitializeComponent();
         }
 
@@ -28,19 +30,35 @@ namespace mqtt_hotkeys_test.Windows
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
-            var hosts = Dns.GetHostEntry(TxtMQTTIP.Text).AddressList;
-            var cleanedIp = TxtMQTTIP.Text.Trim();
-            if (!IPAddress.TryParse(cleanedIp, out IPAddress newIp))
+            try
             {
-                var result = new SelectHostIp(hosts).ShowDialog();
-                MessageBox.Show("You need to enter a valid IP address or domain");
-                return;
+                var cleanedDomain = TxtMQTTIP.Text.Trim();
+                var hosts = Dns.GetHostEntry(cleanedDomain).AddressList;
+                var cleanedIp = TxtMQTTIP.Text.Trim();
+                if (!IPAddress.TryParse(cleanedIp, out IPAddress newIp))
+                {
+                    var result = new SelectHostIp(hosts);
+                    result.ShowDialog();
+                    Console.WriteLine(result.Content.ToString());
+                    ConnSettings.BrokerIp = result.hostIp.ToString();
+                    TxtMQTTIP.Text = ConnSettings.BrokerIp;
+                    //MessageBox.Show("You need to enter a valid IP address or domain");
+                    //return;
+                }
+                else
+                {
+                    ConnSettings.BrokerIp = cleanedIp;
+                }
+                ConnSettings.MqttUser = TxtUsername.Text;
+                ConnSettings.MqttPassword = TxtPassword.Password;
+
+                _parent.SaveConnectionConfigToJson(ConnSettings);
+                Close();
             }
-            Console.WriteLine($"IP: {newIp}");
-            MqttIp = cleanedIp;
-            Username = TxtUsername.Text;
-            Password = TxtPassword.Password;
-            Close();
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }

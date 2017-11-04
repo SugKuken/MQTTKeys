@@ -5,9 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:mqtt_hotkeys_test"
         mc:Ignorable="d"
-        Title="Select Broker Ip"
-        Height="300" Width="300">
-    <StackPanel Name="MainGrid">
-        
+        Title="Pick IP"
+        ResizeMode="NoResize" 
+        SizeToContent="WidthAndHeight">
+    <StackPanel Name="MainGrid" Background="#454545">
+        <Button Name="BtnConfirm"
+                Content="Ok"
+                Click="BtnConfirm_OnClick"/>
     </StackPanel>
 </Window>

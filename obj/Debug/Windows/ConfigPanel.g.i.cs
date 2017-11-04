@@ -9,6 +9,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using LoadingPanelSample.Controls;
+using Microsoft.Windows.Themes;
 using NHotkey.Wpf;
 using System;
 using System.Diagnostics;

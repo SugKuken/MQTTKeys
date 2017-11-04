@@ -15,56 +15,82 @@ namespace mqtt_hotkeys_test.Windows
     /// </summary>
     public partial class MainWindow : Window
     {
-        private readonly bool _isIpConfigured;
-        private readonly MqttClient _mqttClient = new MqttClient("localhost"); /* = new MqttClient("192.168.0.6");*/
+        private bool _isIpConfigured;
+        private MqttClient _mqttClient = new MqttClient("localhost"); /* = new MqttClient("192.168.0.6");*/
+        private static ConnectionSettings _connectionConfig;
 
         public MainWindow()
         {
-            var mqttIp = (string) Settings.Default["BrokerIp"];
-            string user = (string)Settings.Default["MqttUser"], 
-                   pass = "";
-            if (mqttIp.Contains(" "))
-                _isIpConfigured = true;
+            // Check for configure file and load settings if exists
+            _connectionConfig = LoadConnectionSettingsFromJson();
+            string mqttIp = _connectionConfig.BrokerIp,
+                user = _connectionConfig.MqttUser,
+                pass = "";
+
+
             InitializeComponent();
+
+            // Keep re-opening config panel til connected successfully.
             while (!_mqttClient.IsConnected)
                 try
                 {
                     if (!_isIpConfigured)
                     {
-                        var cfg = new ConfigPanel();
+                        var cfg = new ConfigPanel(this);
                         cfg.ShowDialog();
-                        mqttIp = cfg.MqttIp;
-                        user = cfg.Username;
-                        pass = cfg.Password;
-                        if (mqttIp == "") Environment.Exit(0);
-                        var mbox = MessageBox.Show("Save this username for future use?", "Save User", MessageBoxButton.YesNo);
+
+                        _connectionConfig = cfg.ConnSettings;
+
+                        // TODO: Replace with custom checkbox window
+                        var mbox = MessageBox.Show("Save this username & password for future use?", "Save User", MessageBoxButton.YesNo);
                         if (mbox == MessageBoxResult.Yes)
                         {
-                            Settings.Default["MqttUser"] = mqttIp;
-                            Settings.Default.Save();
+                            _connectionConfig.MqttUser = user;
+                            _connectionConfig.MqttPassword = pass;
                         }
+                        mbox = MessageBox.Show("Save this IP for future use?", "Save IP", MessageBoxButton.YesNo);
+                        if (mbox == MessageBoxResult.Yes)
+                        {
+                            _connectionConfig.BrokerIp = mqttIp;
+                        }
+                        SaveConnectionConfigToJson(_connectionConfig);
                     }
-                    // TODO: Add username and password to config panel.
+
                     // If blank, try to connect anyways
-                    _mqttClient = new MqttClient(mqttIp);
-                    var code = _mqttClient.Connect(Guid.NewGuid().ToString(), user, pass);
-                    if (!_isIpConfigured)
-                    {
-                        var mbox = MessageBox.Show("Save this IP for future use?", "Save IP", MessageBoxButton.YesNo);
-                        if (mbox == MessageBoxResult.Yes)
-                        {
-                            Settings.Default["BrokerIp"] = mqttIp;
-                            Settings.Default.Save();
-                        }
-                    }
+                    ConnectToMqtt(_connectionConfig);
                 }
                 catch (Exception ex)
                 {
+                    Console.WriteLine(ex);
                     MessageBox.Show(ex.Message);
+                    _isIpConfigured = false;
                 }
+
+            // Set title to current IP
             Title += $"  -  Connected to: {mqttIp}";
 
             // Load .json file of previous binds if exists
+            LoadBindingsFromJson();
+        }
+
+        private ConnectionSettings LoadConnectionSettingsFromJson()
+        {
+            if (File.Exists("connectionconfig.json"))
+            {
+                var connectionConfig =
+                    JsonConvert.DeserializeObject<ConnectionSettings>(File.ReadAllText("connectionconfig.json"));
+                // True if IP is correctly configured
+                if (connectionConfig.BrokerIp == null) connectionConfig.BrokerIp = "";
+                _isIpConfigured = connectionConfig.BrokerIp.Trim() != "";
+                return connectionConfig;
+            }
+            // If file doesn't exist
+            _isIpConfigured = false;
+            return new ConnectionSettings();
+        }
+
+        private void LoadBindingsFromJson()
+        {
             if (File.Exists("bindingconfig.json"))
             {
                 var bindings =
@@ -76,6 +102,33 @@ namespace mqtt_hotkeys_test.Windows
                     MainStackPanel.Children.Insert(0, rowControl);
                     rowControl.UpdateUi();
                 }
+            }
+        }
+
+        private void ConnectToMqtt(ConnectionSettings connSettings)
+        {
+            if (_mqttClient.IsConnected)
+            {
+                _mqttClient.Disconnect();
+            }
+            Console.WriteLine($"Connecting with --\n" +
+                              $"IP: {connSettings.BrokerIp}\n" +
+                              $"User: {connSettings.MqttUser}\n" +
+                              $"Pass: {connSettings.MqttPassword}");
+            if (connSettings.BrokerIp.Trim() == "")
+            {
+                return;
+            }
+            _mqttClient = new MqttClient(connSettings.BrokerIp);
+
+            try
+            {
+                var code = _mqttClient.Connect(Guid.NewGuid().ToString(), connSettings.MqttUser, connSettings.MqttPassword);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+                MessageBox.Show(ex.Message);
             }
         }
 
@@ -94,7 +147,19 @@ namespace mqtt_hotkeys_test.Windows
             Environment.Exit(0);
         }
 
-        private void SaveBindingsToJson()
+        public void SaveConnectionConfigToJson(ConnectionSettings connectionConfig)
+        {
+            if (connectionConfig != null)
+            {
+                File.WriteAllText("connectionconfig.json", JsonConvert.SerializeObject(connectionConfig));
+            }
+            else
+            {
+                Console.WriteLine("Invalid conn config");
+            }
+        }
+
+        public void SaveBindingsToJson()
         {
             var listOfBindingConfigs = new List<BindingSettings>();
             foreach (var child in MainStackPanel.Children.OfType<HotKeyRowControl>())
@@ -142,9 +207,14 @@ namespace mqtt_hotkeys_test.Windows
 
         private void MenuItemConfig_OnClick(object sender, RoutedEventArgs e)
         {
-            var cfg = new ConfigPanel();
+            var cfg = new ConfigPanel(this);
             cfg.ShowDialog();
-            var mqttIp = cfg.MqttIp;
+            ReloadSettings(cfg.ConnSettings);
+        }
+
+        public void ReloadSettings(ConnectionSettings connSettings)
+        {
+            ConnectToMqtt(connSettings);
         }
     }
 }

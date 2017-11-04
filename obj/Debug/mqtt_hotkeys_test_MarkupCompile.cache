@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\obj\Debug\
+C:\Users\KDSRevival\documents\visual studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\obj\Debug\
 mqtt_hotkeys_test
 none
 false
 DEBUG;TRACE
-C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\App.xaml
+C:\Users\KDSRevival\documents\visual studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\App.xaml
 5-849434904
 
-10664612482
-8121617600
+11-2033395662
+812132550382
 Windows\ConfigPanel.xaml;Windows\HotKeyRowControl.xaml;Windows\MainWindow.xaml;Windows\SelectHostIp.xaml;Windows\SelectHotKey.xaml;
 
 False
