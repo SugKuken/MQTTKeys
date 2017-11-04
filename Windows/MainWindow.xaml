@@ -22,16 +22,28 @@
                         FontWeight="Bold">
         
         <DockPanel Margin="0" Name="MainPanel">
-            <Menu DockPanel.Dock="Top" Background="#454545" Foreground="#ff9000">
-                <MenuItem Header="_File" Background="#454545" BorderThickness="0">
+            <Menu DockPanel.Dock="Top" Background="#454545" Foreground="#ff9000" BorderThickness="0" Padding="0">
+                <MenuItem Header="_File" Background="#454545" BorderThickness="0" FontWeight="Bold" Padding="0">
+                    
                     <MenuItem Header="_Reset All Binds" Background="#454545" BorderThickness="0" Name="MenuItemResetBinds"
-                          Click="MenuItemResetBinds_OnClick" />
-                    <MenuItem Header="_Save Config" Background="#454545" BorderThickness="0" Name="MenuItemSaveConfig"
+                              FontWeight="Bold"
+                              Click="MenuItemResetBinds_OnClick" />
+                    
+                    <MenuItem Header="_Save Keybind Config" Background="#454545" BorderThickness="0" Name="MenuItemSaveConfig"
+                              FontWeight="Bold"
                           Click="MenuItemSaveConfig_OnClick" />
+                    
+                    <MenuItem Header="_Configure Broker" Background="#454545" BorderThickness="0" Name="MenuItemConfig"
+                              FontWeight="Bold"
+                              Click="MenuItemConfig_OnClick" />
+
+                    <MenuItem Header="_Minimize to tray" Background="#454545" BorderThickness="0" Name="MenuItemMinimize"
+                              FontWeight="Bold"
+                              Click="MenuItemClose_OnClick" />
+
                     <MenuItem Header="_Close" Background="#454545" BorderThickness="0" Name="MenuItemClose"
+                              FontWeight="Bold"
                           Click="MenuItemClose_OnClick" />
-                    <MenuItem Header="_Configure IP" Background="#454545" BorderThickness="0" Name="MenuItemConfig"
-                          Click="MenuItemConfig_OnClick" />
                 </MenuItem>
             </Menu>
 

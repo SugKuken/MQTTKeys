@@ -226,5 +226,10 @@ namespace mqtt_hotkeys_test.Windows
                 Console.WriteLine(ex);
             }
         }
+
+        private void MenuItemMinimize_OnClick(object sender, RoutedEventArgs e)
+        {
+            
+        }
     }
 }
