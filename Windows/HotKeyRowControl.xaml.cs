@@ -15,13 +15,9 @@ namespace mqtt_hotkeys_test.Windows
     public partial class HotKeyRowControl : UserControl
     {
         public BindingSettings Binding;
-        private readonly MqttClient _mqttClient = new MqttClient("192.168.0.6");
 
         public HotKeyRowControl()
         {
-            Console.WriteLine("Init hotkey");
-            _mqttClient.Connect(Guid.NewGuid().ToString());
-
             InitializeComponent();
         }
 
@@ -103,10 +99,10 @@ namespace mqtt_hotkeys_test.Windows
                 MessageBox.Show("Topic or message cannot be blank", "Invalid selections", MessageBoxButton.OK);
                 return;
             }
-            _mqttClient.Publish(TxtTopic.Text,
-                Encoding.UTF8.GetBytes(TxtMessage.Text),
-                byte.Parse(TxtQos.Text),
-                false);
+            MainWindow._mqttClient.Publish(TxtTopic.Text,
+                       Encoding.UTF8.GetBytes(TxtMessage.Text),
+                       byte.Parse(TxtQos.Text),
+                       false);
         }
 
         public Point mouseStartPos;

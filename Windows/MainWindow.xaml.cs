@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.Windows;
 using mqtt_hotkeys_test.Properties;
 using Newtonsoft.Json;
@@ -16,47 +18,51 @@ namespace mqtt_hotkeys_test.Windows
     public partial class MainWindow : Window
     {
         private bool _isIpConfigured;
-        private MqttClient _mqttClient = new MqttClient("localhost"); /* = new MqttClient("192.168.0.6");*/
-        private static ConnectionSettings _connectionConfig;
+        public static MqttClient _mqttClient = new MqttClient("localhost"); /* = new MqttClient("192.168.0.6");*/
+        public ConnectionSettings _connectionConfig;
 
         public MainWindow()
         {
+            InitializeComponent();
+            this.Show();
+            BusyIndicatorMainWindow.IsBusy = true;
             // Check for configure file and load settings if exists
             _connectionConfig = LoadConnectionSettingsFromJson();
-            string mqttIp = _connectionConfig.BrokerIp,
-                user = _connectionConfig.MqttUser,
-                pass = "";
+            var i = 0;
 
-
-            InitializeComponent();
-
+            // Til i fix it
+            _isIpConfigured = false;
             // Keep re-opening config panel til connected successfully.
             while (!_mqttClient.IsConnected)
+            {
+                if (!_isIpConfigured)
+                {
+                    var cfg = new ConfigPanel(this);
+                    cfg.ShowDialog();
+
+                    _connectionConfig = cfg.ConnSettings;
+                    Console.WriteLine(_connectionConfig.ToString());
+                    SaveConnectionConfigToJson(_connectionConfig);
+                }
                 try
                 {
+                    Console.WriteLine($"attempt {i++}");
                     if (!_isIpConfigured)
                     {
-                        var cfg = new ConfigPanel(this);
-                        cfg.ShowDialog();
-
-                        _connectionConfig = cfg.ConnSettings;
-
                         // TODO: Replace with custom checkbox window
-                        var mbox = MessageBox.Show("Save this username & password for future use?", "Save User", MessageBoxButton.YesNo);
-                        if (mbox == MessageBoxResult.Yes)
-                        {
-                            _connectionConfig.MqttUser = user;
-                            _connectionConfig.MqttPassword = pass;
-                        }
-                        mbox = MessageBox.Show("Save this IP for future use?", "Save IP", MessageBoxButton.YesNo);
-                        if (mbox == MessageBoxResult.Yes)
-                        {
-                            _connectionConfig.BrokerIp = mqttIp;
-                        }
-                        SaveConnectionConfigToJson(_connectionConfig);
-                    }
+                        //var mbox = MessageBox.Show("Save this username & password for future use?", "Save User", MessageBoxButton.YesNo);
+                        //if (mbox == MessageBoxResult.Yes)
+                        //{
 
-                    // If blank, try to connect anyways
+                        //}
+                        //mbox = MessageBox.Show("Save this IP for future use?", "Save IP", MessageBoxButton.YesNo);
+                        //if (mbox == MessageBoxResult.Yes)
+                        //{
+
+                        //}
+
+                    }
+                    // TODO: Show loading panel
                     ConnectToMqtt(_connectionConfig);
                 }
                 catch (Exception ex)
@@ -66,8 +72,10 @@ namespace mqtt_hotkeys_test.Windows
                     _isIpConfigured = false;
                 }
 
+            }
+
             // Set title to current IP
-            Title += $"  -  Connected to: {mqttIp}";
+            Title += $"  -  Connected to: {_connectionConfig.BrokerIp}";
 
             // Load .json file of previous binds if exists
             LoadBindingsFromJson();
@@ -105,8 +113,9 @@ namespace mqtt_hotkeys_test.Windows
             }
         }
 
-        private void ConnectToMqtt(ConnectionSettings connSettings)
+        public void ConnectToMqtt(ConnectionSettings connSettings)
         {
+            BusyIndicatorMainWindow.IsBusy = true;
             if (_mqttClient.IsConnected)
             {
                 _mqttClient.Disconnect();
@@ -121,15 +130,8 @@ namespace mqtt_hotkeys_test.Windows
             }
             _mqttClient = new MqttClient(connSettings.BrokerIp);
 
-            try
-            {
-                var code = _mqttClient.Connect(Guid.NewGuid().ToString(), connSettings.MqttUser, connSettings.MqttPassword);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex);
-                MessageBox.Show(ex.Message);
-            }
+            var code = _mqttClient.Connect(Guid.NewGuid().ToString(), connSettings.MqttUser, connSettings.MqttPassword);
+            BusyIndicatorMainWindow.IsBusy = false;
         }
 
         private void BtnAddThing_OnClick(object sender, RoutedEventArgs e)
@@ -214,7 +216,15 @@ namespace mqtt_hotkeys_test.Windows
 
         public void ReloadSettings(ConnectionSettings connSettings)
         {
-            ConnectToMqtt(connSettings);
+            try
+            {
+                ConnectToMqtt(connSettings);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Console.WriteLine(ex);
+            }
         }
     }
 }

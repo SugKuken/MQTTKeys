@@ -10,7 +10,7 @@ namespace mqtt_hotkeys_test.Windows
     public partial class ConfigPanel : Window
     {
         public ConnectionSettings ConnSettings;
-        private MainWindow _parent;
+        public MainWindow _parent;
 
 
         public ConfigPanel(MainWindow parent)
@@ -30,20 +30,19 @@ namespace mqtt_hotkeys_test.Windows
 
         private void ButtonBase_OnClick(object sender, RoutedEventArgs e)
         {
+            _parent.BusyIndicatorMainWindow.IsBusy = true;
             try
             {
                 var cleanedDomain = TxtMQTTIP.Text.Trim();
                 var hosts = Dns.GetHostEntry(cleanedDomain).AddressList;
                 var cleanedIp = TxtMQTTIP.Text.Trim();
+                Console.WriteLine(cleanedIp);
                 if (!IPAddress.TryParse(cleanedIp, out IPAddress newIp))
                 {
                     var result = new SelectHostIp(hosts);
                     result.ShowDialog();
-                    Console.WriteLine(result.Content.ToString());
                     ConnSettings.BrokerIp = result.hostIp.ToString();
                     TxtMQTTIP.Text = ConnSettings.BrokerIp;
-                    //MessageBox.Show("You need to enter a valid IP address or domain");
-                    //return;
                 }
                 else
                 {
@@ -53,7 +52,9 @@ namespace mqtt_hotkeys_test.Windows
                 ConnSettings.MqttPassword = TxtPassword.Password;
 
                 _parent.SaveConnectionConfigToJson(ConnSettings);
+                _parent._connectionConfig = ConnSettings;
                 Close();
+
             }
             catch (Exception ex)
             {

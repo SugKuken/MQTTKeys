@@ -4,17 +4,28 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:mqtt_hotkeys_test"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         ResizeMode="NoResize"
         Loaded="ConfigPanel_OnLoaded"
         Title="ConfigPanel" Height="170" Width="300">
-    <DockPanel Background="#454545">
+    <xctk:BusyIndicator Name="BusyIndicatorConfigPanel" 
+                        BusyContent="Loading"
+                        IsBusy="False"
+                        Background="#252525"
+                        Foreground="#ff9000"
+                        FontWeight="Bold">
+        <DockPanel Background="#454545">
         <TextBlock DockPanel.Dock="Top"
                    HorizontalAlignment="Center"
                    Foreground="#ff9000"
                    FontWeight="Bold"
                    Text="Enter your MQTT IP Address:" />
         <TextBox DockPanel.Dock="Top"
+                 Background="#252525"
+                 Foreground="#ff9000"
+                 FontWeight="Bold"
+                 BorderThickness="0"
                  Name="TxtMQTTIP" />
 
         <TextBlock DockPanel.Dock="Top"
@@ -23,6 +34,10 @@
                    FontWeight="Bold"
                    Text="Username: " />
         <TextBox DockPanel.Dock="Top"
+                 Background="#252525"
+                 Foreground="#ff9000"
+                 FontWeight="Bold"
+                 BorderThickness="0"
                  Name="TxtUsername" />
 
         <TextBlock DockPanel.Dock="Top"
@@ -31,8 +46,14 @@
                    FontWeight="Bold"
                    Text="Password:" />
         <PasswordBox DockPanel.Dock="Top"
-                 Name="TxtPassword" />
+                     Background="#252525"
+                     Foreground="#ff9000"
+                     FontWeight="Bold"
+                     BorderThickness="0"
+                     Name="TxtPassword" />
         <Button DockPanel.Dock="Bottom" Content="Continue" MaxWidth="60" MaxHeight="20"
-                Click="ButtonBase_OnClick" />
+                Click="ButtonBase_OnClick"/>
+
     </DockPanel>
+    </xctk:BusyIndicator>
 </Window>

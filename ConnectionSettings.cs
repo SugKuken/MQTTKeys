@@ -12,6 +12,11 @@ namespace mqtt_hotkeys_test
         public string MqttUser { get; set; }
         public string MqttPassword { get; set; }
 
+        public string ToString()
+        {
+            return $"IP:{BrokerIp}\nUser:{MqttUser}\nPass:{MqttPassword}";
+        }
+
         public ConnectionSettings()
         {
             BrokerIp = "";
