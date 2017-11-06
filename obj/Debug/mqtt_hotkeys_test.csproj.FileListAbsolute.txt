@@ -51,3 +51,41 @@ C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt
 C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\bin\Debug\NHotkey.Wpf.dll
 C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\obj\Debug\Windows\test.g.cs
 C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\obj\Debug\Windows\test.baml
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\bin\Debug\mqtt_hotkeys_test.exe.config
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\bin\Debug\mqtt_hotkeys_test.exe
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\bin\Debug\mqtt_hotkeys_test.pdb
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\bin\Debug\M2Mqtt.Net.pdb
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\bin\Debug\Microsoft.Extensions.DependencyInjection.Abstractions.xml
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\bin\Debug\Microsoft.Extensions.Logging.xml
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\bin\Debug\Microsoft.Extensions.Logging.Abstractions.xml
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\bin\Debug\Newtonsoft.Json.xml
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\bin\Debug\de\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\bin\Debug\es\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\bin\Debug\fr\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\bin\Debug\hu\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\bin\Debug\it\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\bin\Debug\pt-BR\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\bin\Debug\ro\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\bin\Debug\ru\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\bin\Debug\sv\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\bin\Debug\zh-Hans\Xceed.Wpf.AvalonDock.resources.dll
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\mqtt_hotkeys_test.csprojResolveAssemblyReference.cache
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\ConfigPanel.g.cs
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\HotKeyRowControl.g.cs
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\MainWindow.g.cs
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\SelectHostIp.g.cs
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\SelectHotKey.g.cs
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\App.g.cs
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\GeneratedInternalTypeHelper.g.cs
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\mqtt_hotkeys_test_MarkupCompile.cache
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\mqtt_hotkeys_test_MarkupCompile.lref
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\ConfigPanel.baml
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\HotKeyRowControl.baml
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\MainWindow.baml
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\SelectHostIp.baml
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\SelectHotKey.baml
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\mqtt_hotkeys_test.g.resources
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\mqtt_hotkeys_test.Properties.Resources.resources
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\mqtt_hotkeys_test.csproj.GenerateResource.Cache
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\mqtt_hotkeys_test.exe
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\mqtt_hotkeys_test.pdb

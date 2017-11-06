@@ -8,7 +8,7 @@
         mc:Ignorable="d"
         ResizeMode="NoResize"
         Loaded="ConfigPanel_OnLoaded"
-        Title="ConfigPanel" Height="170" Width="300">
+        Title="ConfigPanel" Height="170" Width="400">
     <xctk:BusyIndicator Name="BusyIndicatorConfigPanel" 
                         BusyContent="Loading"
                         IsBusy="False"
@@ -16,44 +16,118 @@
                         Foreground="#ff9000"
                         FontWeight="Bold">
         <DockPanel Background="#454545">
-        <TextBlock DockPanel.Dock="Top"
-                   HorizontalAlignment="Center"
-                   Foreground="#ff9000"
-                   FontWeight="Bold"
-                   Text="Enter your MQTT IP Address:" />
-        <TextBox DockPanel.Dock="Top"
-                 Background="#252525"
-                 Foreground="#ff9000"
-                 FontWeight="Bold"
-                 BorderThickness="0"
-                 Name="TxtMQTTIP" />
+            <Grid DockPanel.Dock="top" Height="30" Margin="40,10,0,0">
+                <DockPanel>
+                    <TextBlock
+                       FontSize="17"
+                       DockPanel.Dock="left"
+                       VerticalAlignment="Center"
+                       Foreground="#ff9000"
+                       Text="Host" 
+                       Margin="0,0,0,0" />
 
-        <TextBlock DockPanel.Dock="Top"
-                   HorizontalAlignment="Center"
-                   Foreground="#ff9000"
-                   FontWeight="Bold"
-                   Text="Username: " />
-        <TextBox DockPanel.Dock="Top"
-                 Background="#252525"
-                 Foreground="#ff9000"
-                 FontWeight="Bold"
-                 BorderThickness="0"
-                 Name="TxtUsername" />
+                    <xctk:WatermarkTextBox
+                         Name="TxtMQTTIP"
+                         Watermark="localhost"
+                         Width="170"
+                         Height="23"
+                         FontWeight="Regular"
+                         Margin="5,0,0,0"
+                         DockPanel.Dock="Left"
+                         HorizontalAlignment="Left"
+                         BorderThickness="0"
+                         Background="#252525"
+                         Foreground="#ff9000" />
+                    
+                    <TextBlock
+                       FontSize="17"
+                       DockPanel.Dock="left"
+                       VerticalAlignment="Center"
+                       Foreground="#ff9000"
+                       Text=":" 
+                       Margin="3,0,0,0" />
+                    
+                    <xctk:WatermarkTextBox
+                         Name="TxtMQTTPort"
+                         Width="40"
+                         Height="23"
+                         FontWeight="Regular"
+                         Background="#252525"
+                         Foreground="#ff9000"
+                         BorderThickness="0"
+                         Watermark="1883"
+                         Margin="3,0,0,0" />
 
-        <TextBlock DockPanel.Dock="Top"
-                   HorizontalAlignment="Center"
-                   Foreground="#ff9000"
-                   FontWeight="Bold"
-                   Text="Password:" />
-        <PasswordBox DockPanel.Dock="Top"
-                     Background="#252525"
-                     Foreground="#ff9000"
-                     FontWeight="Bold"
-                     BorderThickness="0"
-                     Name="TxtPassword" />
-        <Button DockPanel.Dock="Bottom" Content="Continue" MaxWidth="60" MaxHeight="20"
-                Click="ButtonBase_OnClick"/>
+                    <Button
+                        Content="Test"
+                        Width="70"
+                        Height="22"
+                        FontSize="10"
+                        FontWeight="Bold"
+                        BorderThickness="0"
+                        Background="#ff9000"
+                        Foreground="#252525" />
+                </DockPanel>
 
-    </DockPanel>
+            </Grid>
+            <Grid DockPanel.Dock="top" Height="30" Margin="40,10,0,0">
+                <DockPanel>
+                    <TextBlock
+                       Text="User" 
+                       FontSize="17"
+                       DockPanel.Dock="left"
+                       VerticalAlignment="Center"
+                       Foreground="#ff9000"
+                       Margin="0,0,0,0" />
+
+                    <xctk:WatermarkTextBox
+                         Name="TxtUsername"
+                         Watermark="admin"
+                         Width="170"
+                         Height="23"
+                         FontWeight="Regular"
+                         Margin="7,0,0,0"
+                         DockPanel.Dock="Left"
+                         HorizontalAlignment="Left"
+                         BorderThickness="0"
+                         Background="#252525"
+                         Foreground="#ff9000" />
+                </DockPanel>
+            </Grid>
+            <Grid DockPanel.Dock="top" Height="30" Margin="11,0,0,0">
+                <DockPanel>
+                    <TextBlock
+                        Text="Password"
+                        FontSize="15"
+                        DockPanel.Dock="left"
+                        VerticalAlignment="Center"
+                        Foreground="#ff9000"
+                        Margin="0,0,0,0" />
+
+                    <PasswordBox 
+                        Name="TxtPassword" 
+                        Width="170"
+                        Height="23"
+                        FontWeight="Regular"
+                        Margin="6,0,0,0"
+                        DockPanel.Dock="Left"
+                        HorizontalAlignment="Left"
+                        BorderThickness="0"
+                        Background="#252525"
+                        Foreground="#ff9000" />
+                </DockPanel>
+            </Grid>
+            <Button
+                Click="ButtonBase_OnClick" 
+                Content="Continue"
+                Width="100"
+                Height="22"
+                FontSize="14"
+                FontWeight="Bold"
+                Margin="10,0,10,0"
+                BorderThickness="0"
+                Background="#ff9000"
+                Foreground="#252525" />
+        </DockPanel>
     </xctk:BusyIndicator>
 </Window>

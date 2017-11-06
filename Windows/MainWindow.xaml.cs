@@ -231,5 +231,10 @@ namespace mqtt_hotkeys_test.Windows
         {
             
         }
+
+        private void HotKeyRowControl_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

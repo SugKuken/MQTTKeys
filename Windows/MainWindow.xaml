@@ -110,7 +110,7 @@
 
                             </Grid>
 
-                            <windows:HotKeyRowControl />
+                            <windows:HotKeyRowControl Loaded="HotKeyRowControl_Loaded" />
 
                             <Button HorizontalAlignment="Left"
                                 FontStretch="Expanded"
