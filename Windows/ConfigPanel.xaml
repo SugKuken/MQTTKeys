@@ -49,6 +49,7 @@
                     
                     <xctk:WatermarkTextBox
                          Name="TxtMQTTPort"
+                         PreviewTextInput="TxtMQTTPort_OnPreviewTextInput"
                          Width="40"
                          Height="23"
                          FontWeight="Regular"
@@ -59,6 +60,7 @@
                          Margin="3,0,0,0" />
 
                     <Button
+                        Name="BtnTestConn"
                         Content="Test"
                         Width="70"
                         Height="22"
@@ -66,7 +68,8 @@
                         FontWeight="Bold"
                         BorderThickness="0"
                         Background="#ff9000"
-                        Foreground="#252525" />
+                        Foreground="#252525"
+                        Click="BtnTestConn_OnClick"/>
                 </DockPanel>
 
             </Grid>
@@ -118,7 +121,9 @@
                 </DockPanel>
             </Grid>
             <Button
-                Click="ButtonBase_OnClick" 
+                Name="BtnContinue"
+                IsEnabled="false"
+                Click="BtnContinue_OnClick" 
                 Content="Continue"
                 Width="100"
                 Height="22"

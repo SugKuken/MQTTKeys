@@ -104,7 +104,7 @@
     <Compile Include="Windows\ConfigPanel.xaml.cs">
       <DependentUpon>ConfigPanel.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Windows\HotKeyRowControl.xaml.cs">
+    <Compile Include="Controls\HotKeyRowControl.xaml.cs">
       <DependentUpon>HotKeyRowControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="Windows\SelectHostIp.xaml.cs">
@@ -117,7 +117,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Windows\HotKeyRowControl.xaml">
+    <Page Include="Controls\HotKeyRowControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -159,6 +159,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -169,8 +170,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Controls\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

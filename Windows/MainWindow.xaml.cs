@@ -136,6 +136,7 @@ namespace mqtt_hotkeys_test.Windows
 
         private void BtnAddThing_OnClick(object sender, RoutedEventArgs e)
         {
+            Console.WriteLine("clicc");
             if (MainStackPanel.Children.OfType<HotKeyRowControl>().Last().TxtMessage.Text == "" ||
                 MainStackPanel.Children.OfType<HotKeyRowControl>().Last().TxtTopic.Text == "")
                 return;
