@@ -128,5 +128,13 @@ namespace mqtt_hotkeys_test.Windows
             if (!char.IsDigit(e.Text, e.Text.Length - 1))
                 e.Handled = true;
         }
+
+        private void ConfigPanel_OnClosed(object sender, EventArgs e)
+        {
+            if (workingIp == "")
+            {
+                Environment.Exit(0);
+            }
+        }
     }
 }
