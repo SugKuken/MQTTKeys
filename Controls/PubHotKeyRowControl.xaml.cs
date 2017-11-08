@@ -12,11 +12,11 @@ namespace mqtt_hotkeys_test.Windows
     /// <summary>
     ///     Interaction logic for HotKeyRowControl.xaml
     /// </summary>
-    public partial class HotKeyRowControl : UserControl
+    public partial class PubHotKeyRowControl : UserControl
     {
         public BindingSettings Binding;
 
-        public HotKeyRowControl()
+        public PubHotKeyRowControl()
         {
             InitializeComponent();
         }

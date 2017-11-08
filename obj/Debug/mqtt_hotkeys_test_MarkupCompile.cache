@@ -10,11 +10,11 @@ none
 false
 DEBUG;TRACE
 C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\App.xaml
-5-964385979
+6229429848
 
-11-87799231
-8121617600
-Windows\ConfigPanel.xaml;Controls\HotKeyRowControl.xaml;Windows\MainWindow.xaml;Windows\SelectHostIp.xaml;Windows\SelectHotKey.xaml;
+131201137781
+83728264126
+Controls\SubHotKeyRowControl.xaml;Windows\ConfigPanel.xaml;Controls\PubHotKeyRowControl.xaml;Windows\MainWindow.xaml;Windows\SelectHostIp.xaml;Windows\SelectHotKey.xaml;
 
 False
 

@@ -18,14 +18,14 @@ namespace mqtt_hotkeys_test.Windows
     public partial class MainWindow : Window
     {
         private bool _isIpConfigured;
-        public static MqttClient _mqttClient = new MqttClient("localhost"); /* = new MqttClient("192.168.0.6");*/
+        public static MqttClient _mqttClient = new MqttClient("localhost");
         public ConnectionSettings _connectionConfig;
+        public static List<MqttTopic> MqttTopics = new List<MqttTopic>();
 
         public MainWindow()
         {
             InitializeComponent();
             this.Show();
-            BusyIndicatorMainWindow.IsBusy = true;
             // Check for configure file and load settings if exists
             _connectionConfig = LoadConnectionSettingsFromJson();
             var i = 0;
@@ -70,7 +70,7 @@ namespace mqtt_hotkeys_test.Windows
                         //}
 
                     }
-                    // TODO: Show loading panel
+                    // TODO: Show loading icon
                     ConnectToMqtt(_connectionConfig);
                 }
                 catch (Exception ex)
@@ -114,7 +114,7 @@ namespace mqtt_hotkeys_test.Windows
                 bindings.Reverse();
                 foreach (var binding in bindings)
                 {
-                    var rowControl = new HotKeyRowControl {Binding = binding};
+                    var rowControl = new PubHotKeyRowControl {Binding = binding};
                     MainStackPanel.Children.Insert(0, rowControl);
                     rowControl.UpdateUi();
                 }
@@ -123,7 +123,6 @@ namespace mqtt_hotkeys_test.Windows
 
         public void ConnectToMqtt(ConnectionSettings connSettings)
         {
-            BusyIndicatorMainWindow.IsBusy = true;
             if (_mqttClient.IsConnected)
             {
                 _mqttClient.Disconnect();
@@ -139,16 +138,15 @@ namespace mqtt_hotkeys_test.Windows
             _mqttClient = new MqttClient(connSettings.BrokerIp);
 
             var code = _mqttClient.Connect(Guid.NewGuid().ToString(), connSettings.MqttUser, connSettings.MqttPassword);
-            BusyIndicatorMainWindow.IsBusy = false;
         }
 
         private void BtnAddThing_OnClick(object sender, RoutedEventArgs e)
         {
             Console.WriteLine("clicc");
-            if (MainStackPanel.Children.OfType<HotKeyRowControl>().Last().TxtMessage.Text == "" ||
-                MainStackPanel.Children.OfType<HotKeyRowControl>().Last().TxtTopic.Text == "")
+            if (MainStackPanel.Children.OfType<PubHotKeyRowControl>().Last().TxtMessage.Text == "" ||
+                MainStackPanel.Children.OfType<PubHotKeyRowControl>().Last().TxtTopic.Text == "")
                 return;
-            var rowControl = new HotKeyRowControl();
+            var rowControl = new PubHotKeyRowControl();
             MainStackPanel.Children.Insert(MainStackPanel.Children.Count - 1, rowControl);
         }
 
@@ -173,7 +171,7 @@ namespace mqtt_hotkeys_test.Windows
         public void SaveBindingsToJson()
         {
             var listOfBindingConfigs = new List<BindingSettings>();
-            foreach (var child in MainStackPanel.Children.OfType<HotKeyRowControl>())
+            foreach (var child in MainStackPanel.Children.OfType<PubHotKeyRowControl>())
             {
                 var binding = child.Binding;
                 // If default topic/message
@@ -192,12 +190,12 @@ namespace mqtt_hotkeys_test.Windows
             var mbox = MessageBox.Show("Are you sure?", "Delete", MessageBoxButton.YesNo);
             if (mbox != MessageBoxResult.Yes) return;
 
-            var toRemove = new List<HotKeyRowControl>();
-            foreach (var child in MainStackPanel.Children.OfType<HotKeyRowControl>())
+            var toRemove = new List<PubHotKeyRowControl>();
+            foreach (var child in MainStackPanel.Children.OfType<PubHotKeyRowControl>())
                 if ((child.TxtMessage.Text != "") & (child.TxtTopic.Text != ""))
                     toRemove.Add(child);
-            foreach (var hotKeyRowControl in toRemove)
-                MainStackPanel.Children.Remove(hotKeyRowControl);
+            foreach (var pubHotKeyRowControl in toRemove)
+                MainStackPanel.Children.Remove(pubHotKeyRowControl);
             MainStackPanel.UpdateLayout();
             SaveBindingsToJson();
         }

@@ -38,7 +38,6 @@ namespace mqtt_hotkeys_test.Windows
 
         private void BtnContinue_OnClick(object sender, RoutedEventArgs e)
         {
-            _parent.BusyIndicatorMainWindow.IsBusy = true;
             try
             {
                 Console.WriteLine(workingIp);
