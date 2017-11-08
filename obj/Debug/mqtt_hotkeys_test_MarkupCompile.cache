@@ -4,16 +4,16 @@
 winexe
 C#
 .cs
-C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\obj\Debug\
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\
 mqtt_hotkeys_test
 none
 false
 DEBUG;TRACE
-C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\App.xaml
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\App.xaml
 5-964385979
 
 11-87799231
-8121617600
+81-824857626
 Windows\ConfigPanel.xaml;Controls\HotKeyRowControl.xaml;Windows\MainWindow.xaml;Windows\SelectHostIp.xaml;Windows\SelectHotKey.xaml;
 
 False

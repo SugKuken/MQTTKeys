@@ -67,7 +67,6 @@ C:\Users\Spogton\Documents\GitHub\MQTTKeys\bin\Debug\sv\Xceed.Wpf.AvalonDock.res
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\bin\Debug\zh-Hans\Xceed.Wpf.AvalonDock.resources.dll
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\mqtt_hotkeys_test.csprojResolveAssemblyReference.cache
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\ConfigPanel.g.cs
-C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\HotKeyRowControl.g.cs
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\MainWindow.g.cs
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\SelectHostIp.g.cs
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\SelectHotKey.g.cs
@@ -76,7 +75,6 @@ C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\GeneratedInternalTypeHelper
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\mqtt_hotkeys_test_MarkupCompile.cache
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\mqtt_hotkeys_test_MarkupCompile.lref
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\ConfigPanel.baml
-C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\HotKeyRowControl.baml
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\MainWindow.baml
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\SelectHostIp.baml
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\SelectHotKey.baml
@@ -87,3 +85,6 @@ C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\mqtt_hotkeys_test.exe
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\mqtt_hotkeys_test.pdb
 C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\obj\Debug\Controls\HotKeyRowControl.g.cs
 C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\obj\Debug\Controls\HotKeyRowControl.baml
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Controls\HotKeyRowControl.g.cs
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\App.baml
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Controls\HotKeyRowControl.baml

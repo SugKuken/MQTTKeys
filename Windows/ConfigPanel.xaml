@@ -8,131 +8,97 @@
         mc:Ignorable="d"
         ResizeMode="NoResize"
         Loaded="ConfigPanel_OnLoaded"
-        Title="ConfigPanel" Height="170" Width="400">
+        Title="ConfigPanel" Height="250" Width="350">
     <xctk:BusyIndicator Name="BusyIndicatorConfigPanel" 
                         BusyContent="Loading"
                         IsBusy="False"
                         Background="#252525"
                         Foreground="#ff9000"
                         FontWeight="Bold">
-        <DockPanel Background="#454545">
-            <Grid DockPanel.Dock="top" Height="30" Margin="40,10,0,0">
-                <DockPanel>
-                    <TextBlock
-                       FontSize="17"
-                       DockPanel.Dock="left"
-                       VerticalAlignment="Center"
-                       Foreground="#ff9000"
-                       Text="Host" 
-                       Margin="0,0,0,0" />
-
+        <Grid Background="#252525">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="180" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Image 
+                Source="pack://application:,,,/logo.png"
+                Grid.Column="0" />
+            <Grid Grid.Column="1" Margin="0,3,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="7"/>
+                    <RowDefinition Height="25"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="22"/>
+                    <RowDefinition Height="20"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <TextBlock
+                    Style="{DynamicResource TxtOrange1}"
+                    Text="Host"
+                    Grid.Row="0" />
+                <xctk:WatermarkTextBox
+                    Style="{DynamicResource TxtBox1}"
+                    Name="TxtMQTTIP"
+                    Watermark="localhost"
+                    Grid.Row="1"
+                    Margin="5,0,10,0" />
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="60"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
                     <xctk:WatermarkTextBox
-                         Name="TxtMQTTIP"
-                         Watermark="localhost"
-                         Width="170"
-                         Height="23"
-                         FontWeight="Regular"
-                         Margin="5,0,0,0"
-                         DockPanel.Dock="Left"
-                         HorizontalAlignment="Left"
-                         BorderThickness="0"
-                         Background="#252525"
-                         Foreground="#ff9000" />
-                    
-                    <TextBlock
-                       FontSize="17"
-                       DockPanel.Dock="left"
-                       VerticalAlignment="Center"
-                       Foreground="#ff9000"
-                       Text=":" 
-                       Margin="3,0,0,0" />
-                    
-                    <xctk:WatermarkTextBox
-                         Name="TxtMQTTPort"
-                         PreviewTextInput="TxtMQTTPort_OnPreviewTextInput"
-                         Width="40"
-                         Height="23"
-                         FontWeight="Regular"
-                         Background="#252525"
-                         Foreground="#ff9000"
-                         BorderThickness="0"
-                         Watermark="1883"
-                         Margin="3,0,0,0" />
-
+                        Style="{DynamicResource TxtBox1}"
+                        PreviewTextInput="TxtMQTTPort_OnPreviewTextInput"
+                        Name="TxtMQTTPort"
+                        Watermark="Port"
+                        Grid.Column="0"
+                        Margin="5,0,10,0" 
+                        VerticalAlignment="Bottom" />
                     <Button
+                        Style="{DynamicResource BtnDefault}"
+                        Click="BtnTestConn_OnClick"
                         Name="BtnTestConn"
-                        Content="Test"
-                        Width="70"
-                        Height="22"
-                        FontSize="10"
-                        FontWeight="Bold"
-                        BorderThickness="0"
-                        Background="#ff9000"
-                        Foreground="#252525"
-                        Click="BtnTestConn_OnClick"/>
-                </DockPanel>
-
+                        Content="Test Connection" 
+                        Grid.Column="1"
+                        Margin="0,6,10,0" />
+                </Grid>
+                <TextBlock
+                    Style="{DynamicResource TxtOrange2}"
+                    Text="Username"
+                    Grid.Row="4"
+                    VerticalAlignment="Bottom" />
+                <xctk:WatermarkTextBox
+                    Style="{DynamicResource TxtBox1}"
+                    Name="TxtUsername"
+                    Watermark="admin"
+                    Grid.Row="5"
+                    Margin="5,0,10,0" />
+                <TextBlock
+                    Style="{DynamicResource TxtOrange2}"
+                    Text="Password"
+                    Grid.Row="6"
+                    VerticalAlignment="Bottom" />
+                <PasswordBox
+                    Style="{DynamicResource PwBox1}"
+                    Name="TxtPassword"
+                    Grid.Row="7"
+                    Margin="5,0,10,0" />
+                <Button
+                    Style="{DynamicResource BtnDefault}"
+                    Click="BtnContinue_OnClick" 
+                    Name="BtnContinue"
+                    Content="Continue"
+                    IsEnabled="False"
+                    Grid.Row="8" 
+                    Width="120"
+                    Height="25"
+                    Margin="5,0,0,10"
+                    VerticalAlignment="Bottom" />
             </Grid>
-            <Grid DockPanel.Dock="top" Height="30" Margin="40,10,0,0">
-                <DockPanel>
-                    <TextBlock
-                       Text="User" 
-                       FontSize="17"
-                       DockPanel.Dock="left"
-                       VerticalAlignment="Center"
-                       Foreground="#ff9000"
-                       Margin="0,0,0,0" />
-
-                    <xctk:WatermarkTextBox
-                         Name="TxtUsername"
-                         Watermark="admin"
-                         Width="170"
-                         Height="23"
-                         FontWeight="Regular"
-                         Margin="7,0,0,0"
-                         DockPanel.Dock="Left"
-                         HorizontalAlignment="Left"
-                         BorderThickness="0"
-                         Background="#252525"
-                         Foreground="#ff9000" />
-                </DockPanel>
-            </Grid>
-            <Grid DockPanel.Dock="top" Height="30" Margin="11,0,0,0">
-                <DockPanel>
-                    <TextBlock
-                        Text="Password"
-                        FontSize="15"
-                        DockPanel.Dock="left"
-                        VerticalAlignment="Center"
-                        Foreground="#ff9000"
-                        Margin="0,0,0,0" />
-
-                    <PasswordBox 
-                        Name="TxtPassword" 
-                        Width="170"
-                        Height="23"
-                        FontWeight="Regular"
-                        Margin="6,0,0,0"
-                        DockPanel.Dock="Left"
-                        HorizontalAlignment="Left"
-                        BorderThickness="0"
-                        Background="#252525"
-                        Foreground="#ff9000" />
-                </DockPanel>
-            </Grid>
-            <Button
-                Name="BtnContinue"
-                IsEnabled="false"
-                Click="BtnContinue_OnClick" 
-                Content="Continue"
-                Width="100"
-                Height="22"
-                FontSize="14"
-                FontWeight="Bold"
-                Margin="10,0,10,0"
-                BorderThickness="0"
-                Background="#ff9000"
-                Foreground="#252525" />
-        </DockPanel>
+        </Grid>
     </xctk:BusyIndicator>
 </Window>
