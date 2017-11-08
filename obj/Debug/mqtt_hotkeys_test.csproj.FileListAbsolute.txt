@@ -88,3 +88,4 @@ C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Controls\HotKeyRowControl.g.cs
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\App.baml
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Controls\HotKeyRowControl.baml
+C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\obj\Debug\App.baml

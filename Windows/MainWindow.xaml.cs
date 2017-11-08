@@ -31,7 +31,7 @@ namespace mqtt_hotkeys_test.Windows
             var i = 0;
 
             // Til i fix it
-            _isIpConfigured = false;
+            _isIpConfigured = File.Exists("connectionconfig.json");
             // Keep re-opening config panel til connected successfully.
             while (!_mqttClient.IsConnected)
             {
@@ -47,8 +47,16 @@ namespace mqtt_hotkeys_test.Windows
                 try
                 {
                     Console.WriteLine($"attempt {i++}");
-                    if (!_isIpConfigured)
+                    if (_isIpConfigured)
                     {
+                        try
+                        {
+                            _connectionConfig = LoadConnectionSettingsFromJson();
+                        }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e);
+                        }
                         // TODO: Replace with custom checkbox window
                         //var mbox = MessageBox.Show("Save this username & password for future use?", "Save User", MessageBoxButton.YesNo);
                         //if (mbox == MessageBoxResult.Yes)
