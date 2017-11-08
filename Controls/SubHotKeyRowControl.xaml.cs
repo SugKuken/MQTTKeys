@@ -76,6 +76,7 @@ namespace mqtt_hotkeys_test.Windows
                         keyCodes.Add(vKey);
                         foreach (var virtualKeyCode in keyCodes)
                         {
+                            // TODO: fix
                             Console.WriteLine("ZONIKS SCOOB"+virtualKeyCode.ToString());
                         }
                         foreach (var virtualKeyCode in modifierKeys)
