@@ -106,7 +106,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="BindingSettings.cs" />
+    <Compile Include="JsonConfigHelper.cs" />
+    <Compile Include="SubBindingSettings.cs" />
+    <Compile Include="PubBindingSettings.cs" />
     <Compile Include="ConnectionSettings.cs" />
     <Compile Include="Controls\SubHotKeyRowControl.xaml.cs">
       <DependentUpon>SubHotKeyRowControl.xaml</DependentUpon>

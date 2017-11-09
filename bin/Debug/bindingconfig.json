@@ -1,1 +1,1 @@
-[]
+{"PubBindingSettings":[{"HotKey":"Tab","ModKeys":"Control, Windows","Topic":"in","Message":"out","Qos":2}],"SubBindingSettings":[{"HotKey":"Escape","ModKeys":"Control, Windows","SubTopic":"in","TriggerMessage":"out","PubTopic":"in","ReplyMessage":"ou","Qos":2}]}

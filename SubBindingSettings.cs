@@ -1,6 +1,6 @@
 ﻿namespace mqtt_hotkeys_test
 {
-    public class BindingSettings
+    public class SubBindingSettings
     {
         // Single Letter
         public string HotKey { get; set; }
@@ -9,9 +9,11 @@
         public string ModKeys { get; set; }
 
         // Mqtt message settings
-        public string Topic { get; set; }
+        public string SubTopic { get; set; }
+        public string TriggerMessage { get; set; }
 
-        public string Message { get; set; }
+        public string PubTopic { get; set; }
+        public string ReplyMessage { get; set; }
         public int Qos { get; set; }
     }
 }
