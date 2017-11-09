@@ -37,11 +37,9 @@ C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt
 C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\bin\Debug\Newtonsoft.Json.xml
 C:\Users\KDSRevival\documents\visual studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\obj\Debug\Windows\ConfigPanel.g.cs
 C:\Users\KDSRevival\documents\visual studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\obj\Debug\Windows\MainWindow.g.cs
-C:\Users\KDSRevival\documents\visual studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\obj\Debug\Windows\SelectHostIp.g.cs
 C:\Users\KDSRevival\documents\visual studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\obj\Debug\Windows\SelectHotKey.g.cs
 C:\Users\KDSRevival\documents\visual studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\obj\Debug\Windows\ConfigPanel.baml
 C:\Users\KDSRevival\documents\visual studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\obj\Debug\Windows\MainWindow.baml
-C:\Users\KDSRevival\documents\visual studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\obj\Debug\Windows\SelectHostIp.baml
 C:\Users\KDSRevival\documents\visual studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\obj\Debug\Windows\SelectHotKey.baml
 C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\bin\Debug\Microsoft.Extensions.Logging.Abstractions.dll
 C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\bin\Debug\Microsoft.Extensions.Logging.dll
@@ -87,7 +85,6 @@ C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt
 C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\obj\Debug\Controls\SubHotKeyRowControl.baml
 C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\obj\Debug\Controls\PubHotKeyRowControl.g.cs
 C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\obj\Debug\Controls\PubHotKeyRowControl.baml
-C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\bin\Debug\WindowsInput.dll
 C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\bin\Debug\WindowsInput.xml
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Controls\SubHotKeyRowControl.g.cs
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Controls\PubHotKeyRowControl.g.cs

@@ -29,7 +29,7 @@
 
         <Button Name="BtnAddSubThing"
             Style="{DynamicResource BtnGraphic1}"
-            Click="BtnAddThing_OnClick"
+            Click="BtnAddHotKey_OnClick"
             Grid.Row="0"
             Panel.ZIndex="1"
             Width="40"
@@ -46,17 +46,17 @@
             </Grid>
         </Button>
 
-        <TabControl Grid.Row="0" SelectionChanged="TabControl_SelectionChanged" Grid.RowSpan="2">
+        <TabControl Name="TabControlMainWindow" Grid.Row="0" SelectionChanged="TabControl_SelectionChanged" Grid.RowSpan="2">
             <TabItem Header="Publish" Style="{DynamicResource PubSubMenu}" >
                 <ScrollViewer IsTabStop="True" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" Background="#464646" >
-                    <StackPanel Name="MainStackPanel" CanHorizontallyScroll="True" Margin="0,7,0,0">
+                    <StackPanel Name="PubStackPanel" CanHorizontallyScroll="True" Margin="0,7,0,0">
                         <windows:PubHotKeyRowControl Loaded="HotKeyRowControl_Loaded" />
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
             <TabItem Name="Subscribe" Header="Subscribe" Style="{DynamicResource PubSubMenu}" >
                 <ScrollViewer IsTabStop="True" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" Background="#464646">
-                    <StackPanel Name="SubMainStackPanel" CanHorizontallyScroll="True"  Margin="0,7,0,0">
+                    <StackPanel Name="SubStackPanel" CanHorizontallyScroll="True"  Margin="0,7,0,0">
                         <windows:SubHotKeyRowControl Loaded="HotKeyRowControl_Loaded" />
                     </StackPanel>
                 </ScrollViewer>
@@ -78,7 +78,7 @@
                 Content="Save" />
             <Button
                 Style="{DynamicResource BtnTopBarMenu}"
-                Click="MenuItemClose_OnClick" 
+                Click="MenuItemMinimize_OnClick" 
                 Name="MenuItemMinimize"
                 Content="Minimize" />
             <Button

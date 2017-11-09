@@ -51,7 +51,16 @@
             Grid.Row="1"
             Margin="3"
             Watermark="Enter reply payload..."
-            Name="TxtReply"/>
+            Name="TxtReplyPayload"/>
+
+
+        <wpfTool:WatermarkTextBox 
+            Style="{DynamicResource TxtBoxPubSub1}"
+            Grid.Column="1"
+            Grid.Row="1"
+            Margin="3"
+            Watermark="Enter reply topic..."
+            Name="TxtReplyTopic"/>
 
         <wpfTool:IntegerUpDown
             FontFamily="Arial"
@@ -70,13 +79,14 @@
             MouseLeftButtonDown="TxtQos_OnMouseLeftButtonDown"
             MouseLeftButtonUp="TxtQos_OnMouseLeftButtonUp"
             Name="TxtQos"/>
+        
         <Button 
             Style="{DynamicResource BtnGraphic1}"
             Height="25"
             Width="25"
             Grid.Column="3"
             Grid.Row="0"
-            Click="BtnSub_OnClick">
+            Click="BtnRemoveHotkey_OnClick">
             <Grid>
                 <Path 
                     Data="{StaticResource Icon_Remove}" 

@@ -43,7 +43,7 @@
         <xctk:IntegerUpDown Name="TxtQos"
             MouseLeftButtonDown="TxtQos_OnMouseLeftButtonDown"
             MouseLeftButtonUp="TxtQos_OnMouseLeftButtonUp"
-            Text="3"
+            Text="2"
             FontFamily="Arial"
             FontSize="18"
             Grid.Column="3" 
@@ -55,14 +55,17 @@
             Margin="3"
             ShowButtonSpinner="False"
             TextAlignment="Center"
+            Maximum="2"
+            Minimum="0"
             DefaultValue="0"/>
-        
+
         <Button 
             Style="{DynamicResource BtnGraphic1}"
             Height="25"
             Width="25"
             Grid.Column="4" 
-            Click="BtnTest_OnClick">
+            Name="BtnRemoveHotkey"
+            Click="BtnRemoveHotkey_OnClick">
             <Grid>
                 <Path 
                     Data="{StaticResource Icon_Remove}" 

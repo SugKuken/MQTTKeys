@@ -6,9 +6,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Documents;
+using System.Windows.Input;
 using mqtt_hotkeys_test.Properties;
 using Newtonsoft.Json;
 using uPLibrary.Networking.M2Mqtt;
+using MessageBox = System.Windows.MessageBox;
 
 namespace mqtt_hotkeys_test.Windows
 {
@@ -21,6 +25,7 @@ namespace mqtt_hotkeys_test.Windows
         public static MqttClient _mqttClient = new MqttClient("localhost");
         public ConnectionSettings _connectionConfig;
         public static List<MqttTopic> MqttTopics = new List<MqttTopic>();
+        public static List<Key> AllHotKeys = new List<Key>();
 
         public MainWindow()
         {
@@ -68,7 +73,6 @@ namespace mqtt_hotkeys_test.Windows
                         //{
 
                         //}
-
                     }
                     // TODO: Show loading icon
                     ConnectToMqtt(_connectionConfig);
@@ -93,9 +97,17 @@ namespace mqtt_hotkeys_test.Windows
         {
             if (File.Exists("connectionconfig.json"))
             {
-                //TODO: If connectionconfig.json is empty, delete and reconfigure
+                //TODO: If connectionconfig.json is empty, delete and reconfigure (Solved? Testing)
                 var connectionConfig =
                     JsonConvert.DeserializeObject<ConnectionSettings>(File.ReadAllText("connectionconfig.json"));
+
+                if (connectionConfig == null)
+                {
+                    _isIpConfigured = false;
+                    File.Delete("connectionconfig.json");
+                    return new ConnectionSettings();
+                }
+
                 // True if IP is correctly configured
                 if (connectionConfig.BrokerIp == null) connectionConfig.BrokerIp = "";
                 _isIpConfigured = connectionConfig.BrokerIp.Trim() != "";
@@ -110,18 +122,71 @@ namespace mqtt_hotkeys_test.Windows
         {
             if (File.Exists("bindingconfig.json"))
             {
-                var bindings =
-                    JsonConvert.DeserializeObject<List<BindingSettings>>(File.ReadAllText("bindingconfig.json"));
-                bindings.Reverse();
-                foreach (var binding in bindings)
+                var allBindings =
+                    JsonConvert.DeserializeObject<JsonConfigHelper>(File.ReadAllText("bindingconfig.json"));
+                var pubBindings = allBindings.PubBindingSettings;
+                var subBindings = allBindings.SubBindingSettings;
+                // If the json file is empty
+                pubBindings.Reverse();
+                subBindings.Reverse();
+                if (pubBindings.Count != 0)
                 {
-                    var rowControl = new PubHotKeyRowControl {Binding = binding};
-                    MainStackPanel.Children.Insert(0, rowControl);
-                    rowControl.UpdateUi();
+                    foreach (var binding in pubBindings)
+                    {
+                        var rowControl = new PubHotKeyRowControl { Binding = binding };
+                        PubStackPanel.Children.Insert(0, rowControl);
+                        rowControl.UpdateUi();
+                    }
                 }
+                if (subBindings.Count != 0) 
+                {
+                    foreach (var binding in subBindings)
+                    {
+                        var rowControl = new SubHotKeyRowControl { Binding = binding };
+                        SubStackPanel.Children.Insert(0, rowControl);
+                        rowControl.UpdateUi();
+                    }
+                }
+
             }
         }
 
+        public void SaveBindingsToJson()
+        {
+            var listOfPubBindingConfigs = new List<PubBindingSettings>();
+            var listOfSubBindingConfigs = new List<SubBindingSettings>();
+            foreach (var child in PubStackPanel.Children.OfType<PubHotKeyRowControl>())
+            {
+                var binding = child.Binding;
+                // If default topic/message
+                if (binding == null)
+                    break;
+                binding.Message = child.TxtMessage.Text;
+                binding.Topic = child.TxtTopic.Text;
+                binding.Qos = child.TxtQos.Value ?? 2;
+                listOfPubBindingConfigs.Add(binding);
+            }
+            foreach (var child in SubStackPanel.Children.OfType<SubHotKeyRowControl>())
+            {
+                var binding = child.Binding;
+                // If default topic/message
+                if (binding == null)
+                    break;
+                binding.SubTopic = child.TxtTopic.Text;
+                binding.TriggerMessage = child.TxtTrigger.Text;
+                binding.Qos = child.TxtQos.Value ?? 2;
+                binding.PubTopic = child.TxtReplyTopic.Text;
+                binding.ReplyMessage = child.TxtReplyPayload.Text;
+                listOfSubBindingConfigs.Add(binding);
+            }
+            var jsonConfigBoy = new JsonConfigHelper()
+            {
+                PubBindingSettings = listOfPubBindingConfigs,
+                SubBindingSettings = listOfSubBindingConfigs
+            };
+            //File.WriteAllText("bindingconfig.json");
+            File.WriteAllText("bindingconfig.json", JsonConvert.SerializeObject(jsonConfigBoy));
+        }
         public void ConnectToMqtt(ConnectionSettings connSettings)
         {
             if (_mqttClient.IsConnected)
@@ -129,9 +194,10 @@ namespace mqtt_hotkeys_test.Windows
                 _mqttClient.Disconnect();
             }
             Console.WriteLine($"Connecting with --\n" +
-                              $"IP: {connSettings.BrokerIp}\n" +
-                              $"User: {connSettings.MqttUser}\n" +
-                              $"Pass: {connSettings.MqttPassword}");
+                              $"IP: {connSettings.BrokerIp}\n");
+                              // Sensitive info, do not debuge with it!!
+                              //$"User: {connSettings.MqttUser}\n" +
+                              //$"Pass: {connSettings.MqttPassword}");
             if (connSettings.BrokerIp.Trim() == "")
             {
                 return;
@@ -141,14 +207,24 @@ namespace mqtt_hotkeys_test.Windows
             var code = _mqttClient.Connect(Guid.NewGuid().ToString(), connSettings.MqttUser, connSettings.MqttPassword);
         }
 
-        private void BtnAddThing_OnClick(object sender, RoutedEventArgs e)
+        private void BtnAddHotKey_OnClick(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine("clicc");
-            if (MainStackPanel.Children.OfType<PubHotKeyRowControl>().Last().TxtMessage.Text == "" ||
-                MainStackPanel.Children.OfType<PubHotKeyRowControl>().Last().TxtTopic.Text == "")
-                return;
-            var rowControl = new PubHotKeyRowControl();
-            MainStackPanel.Children.Insert(MainStackPanel.Children.Count - 1, rowControl);
+            // TODO: keep it like this?
+            //if (MainStackPanel.Children.OfType<PubHotKeyRowControl>().Last().TxtMessage.Text == "" ||
+            //    MainStackPanel.Children.OfType<PubHotKeyRowControl>().Last().TxtTopic.Text == "")
+            //    return;
+            Console.WriteLine(TabControlMainWindow.SelectedIndex);
+            if (TabControlMainWindow.SelectedIndex == 0)
+            {
+                var rowControl = new PubHotKeyRowControl();
+                PubStackPanel.Children.Insert(PubStackPanel.Children.Count - 1, rowControl);
+            }
+            else if (TabControlMainWindow.SelectedIndex == 1)
+            {
+                var rowControl = new SubHotKeyRowControl();
+                SubStackPanel.Children.Insert(SubStackPanel.Children.Count - 1, rowControl);
+            }
+
         }
 
         private void MainWindow_OnClosing(object sender, CancelEventArgs e)
@@ -169,35 +245,18 @@ namespace mqtt_hotkeys_test.Windows
             }
         }
 
-        public void SaveBindingsToJson()
-        {
-            var listOfBindingConfigs = new List<BindingSettings>();
-            foreach (var child in MainStackPanel.Children.OfType<PubHotKeyRowControl>())
-            {
-                var binding = child.Binding;
-                // If default topic/message
-                if (binding == null)
-                    break;
-                binding.Message = child.TxtMessage.Text;
-                binding.Topic = child.TxtTopic.Text;
-                binding.Qos = child.TxtQos.Value ?? 2;
-                listOfBindingConfigs.Add(binding);
-            }
-            File.WriteAllText("bindingconfig.json", JsonConvert.SerializeObject(listOfBindingConfigs));
-        }
-
         private void MenuItemResetBinds_OnClick(object sender, RoutedEventArgs e)
         {
             var mbox = MessageBox.Show("Are you sure?", "Delete", MessageBoxButton.YesNo);
             if (mbox != MessageBoxResult.Yes) return;
 
             var toRemove = new List<PubHotKeyRowControl>();
-            foreach (var child in MainStackPanel.Children.OfType<PubHotKeyRowControl>())
+            foreach (var child in PubStackPanel.Children.OfType<PubHotKeyRowControl>())
                 if ((child.TxtMessage.Text != "") & (child.TxtTopic.Text != ""))
                     toRemove.Add(child);
             foreach (var pubHotKeyRowControl in toRemove)
-                MainStackPanel.Children.Remove(pubHotKeyRowControl);
-            MainStackPanel.UpdateLayout();
+                PubStackPanel.Children.Remove(pubHotKeyRowControl);
+            PubStackPanel.UpdateLayout();
             SaveBindingsToJson();
         }
 
@@ -248,6 +307,11 @@ namespace mqtt_hotkeys_test.Windows
         private void TabControl_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
 
+        }
+
+        public void RemovePubHotKeyAtIndex(int index)
+        {
+            this.PubStackPanel.Children.RemoveAt(index);
         }
     }
 }

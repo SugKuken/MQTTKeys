@@ -9,48 +9,49 @@
         Loaded="SelectHotKey_OnLoaded"
         ResizeMode="NoResize"
         Title="" Height="100" Width="200">
+    <!--TODO: replace with keyboard interface to allow pressing or clicking to set hotkeys
+        TODO: This would easily allow for Fkey & space handling-->
     <DockPanel>
-        <Border BorderThickness="6" BorderBrush="#ff9000">
-            <Grid Background="#454545">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                </Grid.RowDefinitions>
+        <Grid Background="#454545">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
-                <CheckBox Grid.Column="0" Grid.Row="0"
+            <CheckBox Grid.Column="0" Grid.Row="0"
                           Foreground="#ff9000"
                           Content="Control"
                           Name="ChkCtrl"
                           Checked="CheckBox_OnChecked"
                           Unchecked="CheckBox_OnUnChecked" />
 
-                <CheckBox Grid.Column="1" Grid.Row="0"
+            <CheckBox Grid.Column="1" Grid.Row="0"
                           Foreground="#ff9000"
                           Content="Win"
                           Name="ChkWin"
                           Checked="CheckBox_OnChecked" />
 
-                <CheckBox Grid.Column="2" Grid.Row="0"
+            <CheckBox Grid.Column="2" Grid.Row="0"
                           Foreground="#ff9000"
                           Content="Alt"
                           Name="ChkAlt"
                           Checked="CheckBox_OnChecked" />
 
-                <CheckBox Grid.Column="3" Grid.Row="0"
+            <CheckBox Grid.Column="3" Grid.Row="0"
                           Foreground="#ff9000"
                           Content="Shift"
                           Name="ChkShift"
                           Checked="CheckBox_OnChecked" />
 
 
-                <TextBox Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="1"
+            <!--<TextBox Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="1"
                          Margin="10"
                          Name="TxtKey"
                          GotFocus="TxtKey_OnGotFocus"
@@ -60,21 +61,28 @@
                          MaxLength="1"
                          Background="#252525"
                          Foreground="#ff9000"
-                         Text="Key. . ." />
-                <Button Content="OK"
+                         Text="Key. . ." />-->
+
+            <ComboBox Name="CmbBoxKeyList" 
+                     Grid.Column="0" Grid.ColumnSpan="4" Grid.Row="1"
+                     Margin="5"
+                     MinWidth="15"
+                     MinHeight="20">
+            </ComboBox>
+            
+            <Button Content="OK"
                         Name="BtnOk"
                         PreviewMouseLeftButtonUp="BtnOk_OnClick"
                         Width="50"
                         HorizontalAlignment="Center"
                         Grid.Column="1" Grid.Row="2" />
 
-                <Button Content="Cancel"
+            <Button Content="Cancel"
                         Name="BtnCancel"
                         PreviewMouseLeftButtonUp="BtnCancel_OnClick"
                         Width="50"
                         HorizontalAlignment="Center"
                         Grid.Column="2" Grid.Row="2" />
-            </Grid>
-        </Border>
+        </Grid>
     </DockPanel>
 </Window>

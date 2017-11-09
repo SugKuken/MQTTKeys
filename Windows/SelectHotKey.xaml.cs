@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
-using System.Windows.Controls;
+using System.Windows.Forms;
 using System.Windows.Input;
+using Application = System.Windows.Application;
+using CheckBox = System.Windows.Controls.CheckBox;
+using MessageBox = System.Windows.MessageBox;
 
 namespace mqtt_hotkeys_test.Windows
 {
@@ -12,25 +16,28 @@ namespace mqtt_hotkeys_test.Windows
     public partial class SelectHotKey : Window
     {
         private readonly List<ModifierKeys> _outKeys = new List<ModifierKeys>();
+        private bool IsSub = false;
 
-        public SelectHotKey()
+        public SelectHotKey(bool isSub)
         {
+            IsSub = isSub;
             InitializeComponent();
+            CmbBoxKeyList.ItemsSource = (Key[])Enum.GetValues(typeof(Key));
         }
 
         public Key HotKey { get; set; }
         public ModifierKeys ModKeys { get; set; }
 
-        private void TxtKey_OnGotFocus(object sender, RoutedEventArgs e)
-        {
-            TxtKey.Clear();
-        }
+        //private void TxtKey_OnGotFocus(object sender, RoutedEventArgs e)
+        //{
+        //    TxtKey.Clear();
+        //}
 
-        private void TxtKey_OnLostFocus(object sender, RoutedEventArgs e)
-        {
-            if (TxtKey.Text == "")
-                TxtKey.Text = "Key . . .";
-        }
+        //private void TxtKey_OnLostFocus(object sender, RoutedEventArgs e)
+        //{
+        //    if (TxtKey.Text == "")
+        //        TxtKey.Text = "Key...";
+        //}
 
         private void SelectHotKey_OnLoaded(object sender, RoutedEventArgs e)
         {
@@ -42,25 +49,24 @@ namespace mqtt_hotkeys_test.Windows
 
         private void BtnOk_OnClick(object sender, RoutedEventArgs e)
         {
-            if (Enum.TryParse(TxtKey.Text, true, out Key newKey))
+            // TODO: this will probably be replaced if keyboard interface is implemented
             {
+                if (IsSub)
+                {
+                    // TODO: If keyboard interface is implemented, enable space
+                }
                 var parsedMKeys = "";
                 parsedMKeys = string.Join(",", _outKeys);
                 if (Enum.TryParse(parsedMKeys, true, out ModifierKeys tempKeys))
                     ModKeys = tempKeys;
-                Console.WriteLine(ModKeys);
                 if (ModKeys == ModifierKeys.None)
                 {
                     MessageBox.Show("No modifier keys selected.");
                     return;
                 }
-                HotKey = newKey;
+                HotKey = (Key)CmbBoxKeyList.SelectedItem;
                 DialogResult = true;
                 Close();
-            }
-            else
-            {
-                MessageBox.Show("Invalid Key.");
             }
         }
 

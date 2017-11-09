@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using NHotkey;
 using NHotkey.Wpf;
 using uPLibrary.Networking.M2Mqtt;
+using Xceed.Wpf.AvalonDock.Controls;
 
 namespace mqtt_hotkeys_test.Windows
 {
@@ -14,7 +17,7 @@ namespace mqtt_hotkeys_test.Windows
     /// </summary>
     public partial class PubHotKeyRowControl : UserControl
     {
-        public BindingSettings Binding;
+        public PubBindingSettings Binding;
 
         public PubHotKeyRowControl()
         {
@@ -46,23 +49,37 @@ namespace mqtt_hotkeys_test.Windows
 
         private void TxtHotKey_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            var window = new SelectHotKey { Owner = Application.Current.MainWindow };
+            // "Garbage collect" when user sets a different key
+            try
+            {
+                MainWindow.AllHotKeys.Remove((Key)Enum.Parse(typeof(Key), Binding.HotKey));
+                Console.WriteLine($"Removing {(Key)Enum.Parse(typeof(Key), Binding.HotKey)}");
+            }
+            catch (Exception ex)
+            {
+                // Suppressed
+            }
+
+            var window = new SelectHotKey(false) { Owner = Application.Current.MainWindow };
             if (window.ShowDialog() == true)
             {
+
                 var modKeysString = window.ModKeys.ToString();
                 var modKeysForConfig = modKeysString;
-
+                
                 var hotKeyLetter = window.HotKey.ToString();
                 modKeysString = CleanModifierKeysString(modKeysString);
                 TxtHotKey.Text = $"{modKeysString} + {window.HotKey}";
                 SetUpHotkey(window.HotKey, window.ModKeys);
 
                 // Create object for config
-                Binding = new BindingSettings
+                Binding = new PubBindingSettings
                 {
                     HotKey = hotKeyLetter,
                     ModKeys = modKeysForConfig
                 };
+
+                MainWindow.AllHotKeys.Add(window.HotKey);
             }
         }
 
@@ -77,11 +94,11 @@ namespace mqtt_hotkeys_test.Windows
         {
             try
             {
-                HotkeyManager.Current.AddOrReplace(TxtTopic.Text + TxtHotKey.Text, key, modKeys, HandleHotKey);
+                HotkeyManager.Current.AddOrReplace(TxtTopic.Text + TxtHotKey.Text, key, modKeys, true, HandleHotKey);
             }
             catch (Exception ex)
             {
-                TxtHotKey.Text = "Double click to set key";
+                TxtHotKey.Text = "";
                 MessageBox.Show(ex.Message);
                 Console.WriteLine(ex);
             }
@@ -89,6 +106,8 @@ namespace mqtt_hotkeys_test.Windows
 
         private void HandleHotKey(object sender, HotkeyEventArgs e)
         {
+            //this.Dispatcher.Invoke(PublishMqttMessage);
+            Console.WriteLine("Hotkey handler fired");
             PublishMqttMessage();
         }
 
@@ -99,12 +118,22 @@ namespace mqtt_hotkeys_test.Windows
                 MessageBox.Show("Topic or message cannot be blank", "Invalid selections", MessageBoxButton.OK);
                 return;
             }
-            MainWindow._mqttClient.Publish(TxtTopic.Text,
-                       Encoding.UTF8.GetBytes(TxtMessage.Text),
-                       byte.Parse(TxtQos.Text),
-                       false);
+
+            // TODO: implement retained pubs?
+            try
+            {
+                MainWindow._mqttClient.Publish(TxtTopic.Text,
+                   Encoding.UTF8.GetBytes(TxtMessage.Text),
+                   byte.Parse(TxtQos.Text),
+                   false);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
         }
 
+        // TODO: click and drag to set QoS
         public Point mouseStartPos;
         public Point mouseEndPos;
 
@@ -118,6 +147,23 @@ namespace mqtt_hotkeys_test.Windows
         {
             mouseEndPos = e.GetPosition(TxtQos);
             Console.WriteLine(mouseEndPos);
+        }
+
+        private void BtnRemoveHotkey_OnClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var parent = Window.GetWindow(this);
+                var stackPanel = parent.FindLogicalChildren<StackPanel>().FirstOrDefault(x => string.Equals(x.Name, "PubStackPanel", StringComparison.InvariantCultureIgnoreCase));
+                var index = stackPanel.Children.IndexOf(this);
+                if (stackPanel.Children.Count == 1) return;
+                stackPanel.Children.RemoveAt(index);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
+            }
+
         }
     }
 }
