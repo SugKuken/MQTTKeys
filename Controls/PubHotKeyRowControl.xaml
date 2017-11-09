@@ -3,68 +3,92 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:wpfTool="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
+             xmlns:xctk="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
              xmlns:local="clr-namespace:mqtt_hotkeys_test.Windows"
              mc:Ignorable="d" 
-             d:DesignHeight="30" d:DesignWidth="500">
-    
+             d:DesignHeight="40" d:DesignWidth="800">
+
     <Grid Background="#454545">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1.3*"/>
+            <ColumnDefinition Width="160"/>
+            <ColumnDefinition Width="260"/>
+            <ColumnDefinition Width="260"/>
+            <ColumnDefinition Width="40"/>
+            <ColumnDefinition Width="40"/>
+            <ColumnDefinition Width="30"/>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="0.3*"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="0.6*"/>
         </Grid.ColumnDefinitions>
+
+        <xctk:WatermarkTextBox Name="TxtHotKey"
+            Style="{DynamicResource TxtBoxPubSub1}"
+            MouseDoubleClick="TxtHotKey_OnMouseDoubleClick"
+            Grid.Column="0"
+            Watermark="Set Hotkey"
+            Margin="3"
+            IsReadOnly="True" />
+
+        <xctk:WatermarkTextBox
+            Style="{DynamicResource TxtBoxPubSub1}"
+            Grid.Column="1" 
+            Margin="3"
+            Watermark="Topic"
+            Name="TxtTopic"/>
+
+        <xctk:WatermarkTextBox Name="TxtMessage"
+            Style="{DynamicResource TxtBoxPubSub1}"
+            Grid.Column="2" 
+            Margin="3"
+            Watermark="Message" />
+
+        <xctk:IntegerUpDown Name="TxtQos"
+            MouseLeftButtonDown="TxtQos_OnMouseLeftButtonDown"
+            MouseLeftButtonUp="TxtQos_OnMouseLeftButtonUp"
+            Text="3"
+            FontFamily="Arial"
+            FontSize="18"
+            Grid.Column="3" 
+            Height="25"
+            Padding="0"
+            BorderThickness="0"
+            Foreground="#ff9000"
+            Background="#252525" 
+            Margin="3"
+            ShowButtonSpinner="False"
+            TextAlignment="Center"
+            DefaultValue="0"/>
         
-        <wpfTool:WatermarkTextBox Grid.Column="0" 
-                 BorderThickness="0"
-                 FontWeight="Bold"
-                 Foreground="#ff9000"
-                 Background="#252525" 
-                 Text="Double click to set key"
-                 MouseDoubleClick="TxtHotKey_OnMouseDoubleClick"
-                 Margin="3"
-                 IsReadOnly="True"
-                 Name="TxtHotKey"/>
+        <Button 
+            Style="{DynamicResource BtnGraphic1}"
+            Height="25"
+            Width="25"
+            Grid.Column="4" 
+            Click="BtnTest_OnClick">
+            <Grid>
+                <Path 
+                    Data="{StaticResource Icon_Remove}" 
+                    Fill="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}"
+                    Stretch="Uniform"
+                    Width="25" 
+                    Height="25" />
+            </Grid>
+        </Button>
         
-        <wpfTool:WatermarkTextBox Grid.Column="1" 
-                                  BorderThickness="0"
-                                  FontWeight="Bold"
-                                  Foreground="#ff9000"
-                                  Background="#252525" 
-                                  Margin="3"
-                                  Watermark="Enter Topic Here..."
-                                  Name="TxtTopic"/>
-        
-        <wpfTool:IntegerUpDown Grid.Column="2" 
-                               BorderThickness="0"
-                               FontWeight="Bold"
-                               Foreground="#ff9000"
-                               Background="#252525" 
-                               Margin="3"
-                               ShowButtonSpinner="False"
-                               Text="2"
-                               TextAlignment="Center"
-                               DefaultValue="2"
-                               MouseLeftButtonDown="TxtQos_OnMouseLeftButtonDown"
-                               MouseLeftButtonUp="TxtQos_OnMouseLeftButtonUp"
-                               Name="TxtQos"/>
-        
-        <wpfTool:WatermarkTextBox  Grid.Column="3" 
-                                   BorderThickness="0"
-                                   FontWeight="Bold"
-                                   Foreground="#ff9000"
-                                   Background="#252525" 
-                                   Margin="3"
-                                   Watermark="Enter payload..."
-                                   Name="TxtMessage"/>
-        
-        <Button Grid.Column="4" 
-                FontWeight="Bold"
-                Background="#ff9000"
-                Content="Test"
-                Click="BtnTest_OnClick"
-                Margin="1"/>
+        <Button 
+            Style="{DynamicResource BtnGraphic1}"
+            Height="25"
+            Width="25"
+            Grid.Column="5" 
+            Click="BtnTest_OnClick"
+            Margin="0,0,0,0">
+            <Grid>
+                <Path 
+                    Data="{StaticResource Icon_Send}" 
+                    Fill="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}"
+                    Stretch="Uniform"
+                    Width="25" 
+                    Height="25" />
+
+            </Grid>
+        </Button>
     </Grid>
 </UserControl>

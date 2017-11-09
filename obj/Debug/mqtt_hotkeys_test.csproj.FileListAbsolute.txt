@@ -68,7 +68,6 @@ C:\Users\Spogton\Documents\GitHub\MQTTKeys\bin\Debug\zh-Hans\Xceed.Wpf.AvalonDoc
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\mqtt_hotkeys_test.csprojResolveAssemblyReference.cache
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\ConfigPanel.g.cs
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\MainWindow.g.cs
-C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\SelectHostIp.g.cs
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\SelectHotKey.g.cs
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\App.g.cs
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\GeneratedInternalTypeHelper.g.cs
@@ -76,16 +75,13 @@ C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\mqtt_hotkeys_test_MarkupCom
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\mqtt_hotkeys_test_MarkupCompile.lref
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\ConfigPanel.baml
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\MainWindow.baml
-C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\SelectHostIp.baml
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Windows\SelectHotKey.baml
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\mqtt_hotkeys_test.g.resources
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\mqtt_hotkeys_test.Properties.Resources.resources
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\mqtt_hotkeys_test.csproj.GenerateResource.Cache
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\mqtt_hotkeys_test.exe
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\mqtt_hotkeys_test.pdb
-C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Controls\HotKeyRowControl.g.cs
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\App.baml
-C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Controls\HotKeyRowControl.baml
 C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\obj\Debug\App.baml
 C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\obj\Debug\Controls\SubHotKeyRowControl.g.cs
 C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\obj\Debug\Controls\SubHotKeyRowControl.baml
@@ -93,3 +89,9 @@ C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt
 C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\obj\Debug\Controls\PubHotKeyRowControl.baml
 C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\bin\Debug\WindowsInput.dll
 C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\bin\Debug\WindowsInput.xml
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Controls\SubHotKeyRowControl.g.cs
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Controls\PubHotKeyRowControl.g.cs
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\bin\Debug\WindowsInput.dll
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\bin\Debug\WindowsInput.xml
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Controls\SubHotKeyRowControl.baml
+C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Controls\PubHotKeyRowControl.baml

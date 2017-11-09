@@ -93,6 +93,7 @@ namespace mqtt_hotkeys_test.Windows
         {
             if (File.Exists("connectionconfig.json"))
             {
+                //TODO: If connectionconfig.json is empty, delete and reconfigure
                 var connectionConfig =
                     JsonConvert.DeserializeObject<ConnectionSettings>(File.ReadAllText("connectionconfig.json"));
                 // True if IP is correctly configured
@@ -240,6 +241,11 @@ namespace mqtt_hotkeys_test.Windows
         }
 
         private void HotKeyRowControl_Loaded(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void TabControl_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
 
         }

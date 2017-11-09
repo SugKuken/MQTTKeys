@@ -306,3 +306,8 @@ __pycache__/
 
 # OpenCover UI analysis results
 OpenCover/
+buttons.txt
+bin/Debug/mqtt_hotkeys_test.exe
+bin/Debug/mqtt_hotkeys_test.pdb
+bin/Debug/mqtt_hotkeys_test.exe
+bin/Debug/mqtt_hotkeys_test.pdb

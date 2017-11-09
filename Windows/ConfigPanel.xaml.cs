@@ -90,7 +90,6 @@ namespace mqtt_hotkeys_test.Windows
 
                 TxtMQTTIP.Foreground = successGreen;
                 TxtMQTTPort.Foreground = successGreen;
-                BtnTestConn.Background = successGreen;
 
                 BtnContinue.IsEnabled = true;
 
