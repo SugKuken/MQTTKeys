@@ -4,21 +4,16 @@ using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
 using WindowsInput;
 using WindowsInput.Native;
-using mqtt_hotkeys_test.Properties;
+using mqtt_hotkeys_test.Controls;
 using Newtonsoft.Json;
 using uPLibrary.Networking.M2Mqtt;
 using MessageBox = System.Windows.MessageBox;
 
-namespace mqtt_hotkeys_test.Controls
+namespace mqtt_hotkeys_test.Windows
 {
     /// <summary>
     ///     Interaction logic for MainWindow.xaml
@@ -26,8 +21,8 @@ namespace mqtt_hotkeys_test.Controls
     public partial class MainWindow : Window
     {
         private bool _isIpConfigured;
-        public static MqttClient _mqttClient = new MqttClient("localhost");
-        public ConnectionSettings _connectionConfig;
+        public static MqttClient MqttClient = new MqttClient("localhost");
+        public ConnectionSettings ConnectionConfig;
         public static List<MqttTopic> MqttTopics = new List<MqttTopic>();
         public static List<SubscribeHelper> ActiveSubscriptions = new List<SubscribeHelper>();
         public static List<Key> AllHotKeys = new List<Key>();
@@ -37,22 +32,22 @@ namespace mqtt_hotkeys_test.Controls
             InitializeComponent();
             this.Show();
             // Check for configure file and load settings if exists
-            _connectionConfig = LoadConnectionSettingsFromJson();
+            ConnectionConfig = LoadConnectionSettingsFromJson();
             var i = 0;
 
             // Til i fix it
             _isIpConfigured = File.Exists("connectionconfig.json");
             // Keep re-opening config panel til connected successfully.
-            while (!_mqttClient.IsConnected)
+            while (!MqttClient.IsConnected)
             {
                 if (!_isIpConfigured)
                 {
                     var cfg = new ConfigPanel(this);
                     cfg.ShowDialog();
 
-                    _connectionConfig = cfg.ConnSettings;
-                    Console.WriteLine(_connectionConfig.ToString());
-                    SaveConnectionConfigToJson(_connectionConfig);
+                    ConnectionConfig = cfg.ConnSettings;
+                    Console.WriteLine(ConnectionConfig.ToString());
+                    SaveConnectionConfigToJson(ConnectionConfig);
                 }
                 try
                 {
@@ -61,7 +56,7 @@ namespace mqtt_hotkeys_test.Controls
                     {
                         try
                         {
-                            _connectionConfig = LoadConnectionSettingsFromJson();
+                            ConnectionConfig = LoadConnectionSettingsFromJson();
                         }
                         catch (Exception e)
                         {
@@ -80,7 +75,7 @@ namespace mqtt_hotkeys_test.Controls
                         //}
                     }
                     // TODO: Show loading icon
-                    ConnectToMqtt(_connectionConfig);
+                    ConnectToMqtt(ConnectionConfig);
                 }
                 catch (Exception ex)
                 {
@@ -92,85 +87,16 @@ namespace mqtt_hotkeys_test.Controls
             }
 
             // Set title to current IP
-            Title += $"  -  Connected to: {_connectionConfig.BrokerIp}";
+            Title += $"  -  Connected to: {ConnectionConfig.BrokerIp}";
 
             // Load .json file of previous binds if exists
             LoadBindingsFromJson();
-            _mqttClient.MqttMsgPublishReceived += _mqttClient_MqttMsgPublishReceived;
+            MqttClient.MqttMsgPublishReceived += MqttClient_MqttMsgPublishReceived;
         }
 
-        private void _mqttClient_MqttMsgPublishReceived(object sender, uPLibrary.Networking.M2Mqtt.Messages.MqttMsgPublishEventArgs e)
-        {
-            Console.WriteLine("Mqtt handler fired");
-            foreach (var subBinding in ActiveSubscriptions)
-            {
-                Console.WriteLine($"sub topic: {subBinding.SubTopic}\n" +
-                                  $"trig msg: {subBinding.TriggerMessage}");
-                if (e.Topic == subBinding.SubTopic &&
-                    !e.DupFlag &&
-                    Encoding.UTF8.GetString(e.Message) == subBinding.TriggerMessage)
-                {
-                    Console.WriteLine($"Message received on topic [{e.Topic}]: {Encoding.UTF8.GetString(e.Message)}\n" +
-                                      $"DupFlag: {e.DupFlag}\n" +
-                                      $"QoS: {e.QosLevel}");
-
-                    VirtualKeyCode vKey = (VirtualKeyCode)KeyInterop.VirtualKeyFromKey(subBinding.HotKey);
-                    // Handle and press hotkey
-                    var keyCodes = new List<VirtualKeyCode> { vKey };
-
-                    foreach (var subBindingModifierKey in subBinding.modifierKeys) 
-                    {
-                        Console.WriteLine(subBindingModifierKey.ToString());
-                    }
-                    Console.WriteLine(keyCodes.FirstOrDefault());
-                    // TODO: When firing mqtt from keystroke, it will continually retrigger. find possible fix?
-                    new InputSimulator().Keyboard.ModifiedKeyStroke(subBinding.modifierKeys, keyCodes);
-
-
-                    if (subBinding.ReplyMessage.Trim() != "")
-                    {
-                        if (string.Equals(subBinding.TriggerMessage, subBinding.ReplyMessage,
-                            StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            MessageBox.Show("Reply payload and trigger payload cannot be the same!");
-                            return;
-                        }
-                        var topic = subBinding.PubTopic.Trim() == "" ? subBinding.SubTopic.Trim() : subBinding.PubTopic.Trim();
-                        _mqttClient.Publish(topic,
-                            Encoding.UTF8.GetBytes(subBinding.ReplyMessage),
-                            byte.Parse(subBinding.Qos.ToString()),
-                            false);
-                    }
-
-                }
-            }
-        }
-
-        private ConnectionSettings LoadConnectionSettingsFromJson()
-        {
-            if (File.Exists("connectionconfig.json"))
-            {
-                //TODO: If connectionconfig.json is empty, delete and reconfigure (Solved? Testing)
-                var connectionConfig =
-                    JsonConvert.DeserializeObject<ConnectionSettings>(File.ReadAllText("connectionconfig.json"));
-
-                if (connectionConfig == null)
-                {
-                    _isIpConfigured = false;
-                    File.Delete("connectionconfig.json");
-                    return new ConnectionSettings();
-                }
-
-                // True if IP is correctly configured
-                if (connectionConfig.BrokerIp == null) connectionConfig.BrokerIp = "";
-                _isIpConfigured = connectionConfig.BrokerIp.Trim() != "";
-                return connectionConfig;
-            }
-            // If file doesn't exist
-            _isIpConfigured = false;
-            return new ConnectionSettings();
-        }
-
+        //**************************//
+        // Config Load/Save Methods //
+        //**************************//
         private void LoadBindingsFromJson()
         {
             if (File.Exists("bindingconfig.json"))
@@ -204,6 +130,43 @@ namespace mqtt_hotkeys_test.Controls
             }
         }
 
+        private ConnectionSettings LoadConnectionSettingsFromJson()
+        {
+            if (File.Exists("connectionconfig.json"))
+            {
+                //TODO: If connectionconfig.json is empty, delete and reconfigure (Solved? Testing)
+                var connectionConfig =
+                    JsonConvert.DeserializeObject<ConnectionSettings>(File.ReadAllText("connectionconfig.json"));
+
+                if (connectionConfig == null)
+                {
+                    _isIpConfigured = false;
+                    File.Delete("connectionconfig.json");
+                    return new ConnectionSettings();
+                }
+
+                // True if IP is correctly configured
+                if (connectionConfig.BrokerIp == null) connectionConfig.BrokerIp = "";
+                _isIpConfigured = connectionConfig.BrokerIp.Trim() != "";
+                return connectionConfig;
+            }
+            // If file doesn't exist
+            _isIpConfigured = false;
+            return new ConnectionSettings();
+        }
+
+        public void SaveConnectionConfigToJson(ConnectionSettings connectionConfig)
+        {
+            if (connectionConfig != null)
+            {
+                File.WriteAllText("connectionconfig.json", JsonConvert.SerializeObject(connectionConfig));
+            }
+            else
+            {
+                Console.WriteLine("Invalid conn config");
+            }
+        }
+
         public void SaveBindingsToJson()
         {
             var listOfPubBindingConfigs = new List<PubBindingSettings>();
@@ -232,7 +195,7 @@ namespace mqtt_hotkeys_test.Controls
                 binding.ReplyMessage = child.TxtReplyPayload.Text;
                 listOfSubBindingConfigs.Add(binding);
             }
-            var jsonConfigBoy = new JsonConfigHelper()
+            var jsonConfigBoy = new JsonConfigHelper
             {
                 PubBindingSettings = listOfPubBindingConfigs,
                 SubBindingSettings = listOfSubBindingConfigs
@@ -240,24 +203,73 @@ namespace mqtt_hotkeys_test.Controls
             //File.WriteAllText("bindingconfig.json");
             File.WriteAllText("bindingconfig.json", JsonConvert.SerializeObject(jsonConfigBoy));
         }
+
+        public void ReloadSettings(ConnectionSettings connSettings)
+        {
+            try
+            {
+                ConnectToMqtt(connSettings);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+                Console.WriteLine(ex);
+            }
+        }
+
+        //*********************//
+        // Mqtt Helper Methods //
+        //*********************//
         public void ConnectToMqtt(ConnectionSettings connSettings)
         {
-            if (_mqttClient.IsConnected)
+            if (MqttClient.IsConnected)
             {
-                _mqttClient.Disconnect();
+                MqttClient.Disconnect();
             }
-            Console.WriteLine($"Connecting with --\n" +
+            Console.WriteLine( "Connecting with --\n" +
                               $"IP: {connSettings.BrokerIp}\n");
-                              // Sensitive info, do not debuge with it!!
-                              //$"User: {connSettings.MqttUser}\n" +
-                              //$"Pass: {connSettings.MqttPassword}");
+            // Sensitive info, do not debuge with it!!
+            //$"User: {connSettings.MqttUser}\n" +
+            //$"Pass: {connSettings.MqttPassword}");
             if (connSettings.BrokerIp.Trim() == "")
             {
                 return;
             }
-            _mqttClient = new MqttClient(connSettings.BrokerIp);
+            MqttClient = new MqttClient(connSettings.BrokerIp);
 
-            var code = _mqttClient.Connect(Guid.NewGuid().ToString(), connSettings.MqttUser, connSettings.MqttPassword);
+            var code = MqttClient.Connect(Guid.NewGuid().ToString(), connSettings.MqttUser, connSettings.MqttPassword);
+        }
+
+        public static void AddMqttSub(SubscribeHelper subHelper)
+        {
+            // TODO: Check if necessary
+            MqttTopics = MqttTopics
+                .GroupBy(x => x.Topic)
+                .Select(x => x.First())
+                .ToList();
+            MqttClient.Unsubscribe(MqttTopics.Select(x => x.Topic).ToArray());
+
+            MqttClient.Subscribe(MqttTopics.Select(x => x.Topic).ToArray(),
+                MqttTopics.Select(x => x.QosLevel).ToArray());
+            MqttTopics.ForEach(Console.WriteLine);
+            ActiveSubscriptions.Add(subHelper);
+        }
+
+        //***************//
+        // Misc. Methods //
+        //***************//
+        public void RemovePubHotKeyAtIndex(int index)
+        {
+            this.PubStackPanel.Children.RemoveAt(index);
+        }
+
+        //*******************************//
+        // Window Element Event Handlers //
+        //*******************************//
+        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
+        {
+            SaveBindingsToJson();
+            Environment.Exit(0);
         }
 
         private void BtnAddHotKey_OnClick(object sender, RoutedEventArgs e)
@@ -278,24 +290,6 @@ namespace mqtt_hotkeys_test.Controls
                 SubStackPanel.Children.Insert(SubStackPanel.Children.Count - 1, rowControl);
             }
 
-        }
-
-        private void MainWindow_OnClosing(object sender, CancelEventArgs e)
-        {
-            SaveBindingsToJson();
-            Environment.Exit(0);
-        }
-
-        public void SaveConnectionConfigToJson(ConnectionSettings connectionConfig)
-        {
-            if (connectionConfig != null)
-            {
-                File.WriteAllText("connectionconfig.json", JsonConvert.SerializeObject(connectionConfig));
-            }
-            else
-            {
-                Console.WriteLine("Invalid conn config");
-            }
         }
 
         private void MenuItemResetBinds_OnClick(object sender, RoutedEventArgs e)
@@ -334,19 +328,6 @@ namespace mqtt_hotkeys_test.Controls
             ReloadSettings(cfg.ConnSettings);
         }
 
-        public void ReloadSettings(ConnectionSettings connSettings)
-        {
-            try
-            {
-                ConnectToMqtt(connSettings);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message);
-                Console.WriteLine(ex);
-            }
-        }
-
         private void MenuItemMinimize_OnClick(object sender, RoutedEventArgs e)
         {
             
@@ -357,29 +338,54 @@ namespace mqtt_hotkeys_test.Controls
 
         }
 
-        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //*********************//
+        // MQTT Event Handlers //
+        //*********************//
+        private void MqttClient_MqttMsgPublishReceived(object sender, uPLibrary.Networking.M2Mqtt.Messages.MqttMsgPublishEventArgs e)
         {
+            Console.WriteLine("Mqtt handler fired");
+            foreach (var subBinding in ActiveSubscriptions)
+            {
+                Console.WriteLine($"sub topic: {subBinding.SubTopic}\n" +
+                                  $"trig msg: {subBinding.TriggerMessage}");
+                if (e.Topic == subBinding.SubTopic &&
+                    !e.DupFlag &&
+                    Encoding.UTF8.GetString(e.Message) == subBinding.TriggerMessage)
+                {
+                    Console.WriteLine($"Message received on topic [{e.Topic}]: {Encoding.UTF8.GetString(e.Message)}\n" +
+                                      $"DupFlag: {e.DupFlag}\n" +
+                                      $"QoS: {e.QosLevel}");
 
-        }
+                    VirtualKeyCode vKey = (VirtualKeyCode)KeyInterop.VirtualKeyFromKey(subBinding.HotKey);
+                    // Handle and press hotkey
+                    var keyCodes = new List<VirtualKeyCode> { vKey };
 
-        public void RemovePubHotKeyAtIndex(int index)
-        {
-            this.PubStackPanel.Children.RemoveAt(index);
-        }
+                    foreach (var subBindingModifierKey in subBinding.modifierKeys) 
+                    {
+                        Console.WriteLine(subBindingModifierKey.ToString());
+                    }
+                    Console.WriteLine(keyCodes.FirstOrDefault());
+                    // TODO: When firing mqtt from keystroke, it will continually retrigger. find possible fix?
+                    new InputSimulator().Keyboard.ModifiedKeyStroke(subBinding.modifierKeys, keyCodes);
 
-        public static void AddMqttSub(SubscribeHelper subHelper)
-        {
-             // TODO: Check if necessary
-            MqttTopics = MqttTopics
-                .GroupBy(x => x.Topic)
-                .Select(x => x.First())
-                .ToList();
-            _mqttClient.Unsubscribe(MqttTopics.Select(x => x.Topic).ToArray());
 
-            _mqttClient.Subscribe(MqttTopics.Select(x => x.Topic).ToArray(),
-                                  MqttTopics.Select(x => x.QosLevel).ToArray());
-            MqttTopics.ForEach(Console.WriteLine);
-            ActiveSubscriptions.Add(subHelper);
+                    if (subBinding.ReplyMessage.Trim() != "")
+                    {
+                        if (string.Equals(subBinding.TriggerMessage, subBinding.ReplyMessage,
+                            StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            MessageBox.Show("Reply payload and trigger payload cannot be the same!");
+                            return;
+                        }
+                        var topic = subBinding.PubTopic.Trim() == "" ? subBinding.SubTopic.Trim() : subBinding.PubTopic.Trim();
+                        MqttClient.Publish(topic,
+                            Encoding.UTF8.GetBytes(subBinding.ReplyMessage),
+                            byte.Parse(subBinding.Qos.ToString()),
+                            false);
+                    }
+
+                }
+            }
         }
     }
 }

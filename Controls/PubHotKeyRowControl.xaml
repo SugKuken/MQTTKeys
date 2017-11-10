@@ -4,99 +4,101 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:xctk="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
-             xmlns:local="clr-namespace:mqtt_hotkeys_test.Controls"
              mc:Ignorable="d" 
              Background="#252525"
              Margin="0,5,0,5"
              Height="40"
              Width="802">
+
+    <!--TODO: Margin="5" looks kinda nice?-->
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="160"/>
-            <ColumnDefinition Width="260"/>
-            <ColumnDefinition Width="260"/>
-            <ColumnDefinition Width="40"/>
-            <ColumnDefinition Width="40"/>
-            <ColumnDefinition Width="30"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+                <ColumnDefinition Width="160"/>
+                <ColumnDefinition Width="260"/>
+                <ColumnDefinition Width="260"/>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="40"/>
+                <ColumnDefinition Width="30"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
         <Button
-            Name="BtnHotKey"
-            Style="{DynamicResource BtnPubSub}"
-            Click="BtnHotKey_OnClick"
-            Cursor="Arrow"
-            Content="Set key"
-            Grid.Column="0"
-            Grid.Row="0"
-            Margin="3,3,10,3"/>
+                Name="BtnHotKey"
+                Style="{DynamicResource BtnPubSub}"
+                Click="BtnHotKey_OnClick"
+                Cursor="Arrow"
+                Content="Set key"
+                Grid.Column="0"
+                Grid.Row="0"
+                Margin="3,3,10,3"/>
 
         <xctk:WatermarkTextBox
-            Style="{DynamicResource TxtBoxPubSub1}"
-            Grid.Column="1" 
-            Margin="3"
-            Watermark="Topic"
-            Name="TxtTopic"/>
+                Style="{DynamicResource TxtBoxPubSub1}"
+                Grid.Column="1" 
+                Margin="3"
+                Watermark="Topic"
+                Name="TxtTopic"/>
 
         <xctk:WatermarkTextBox Name="TxtMessage"
-            Style="{DynamicResource TxtBoxPubSub1}"
-            Grid.Column="2" 
-            Margin="3"
-            Watermark="Message" />
+                                   Style="{DynamicResource TxtBoxPubSub1}"
+                                   Grid.Column="2" 
+                                   Margin="3"
+                                   Watermark="Message" />
 
         <xctk:IntegerUpDown Name="TxtQos"
-            MouseLeftButtonDown="TxtQos_OnMouseLeftButtonDown"
-            MouseLeftButtonUp="TxtQos_OnMouseLeftButtonUp"
-            Text="0"
-            FontFamily="Arial"
-            FontSize="18"
-            Grid.Column="3" 
-            Height="25"
-            Padding="0"
-            BorderThickness="0,0,0,1"
-            BorderBrush="{StaticResource Color1}"
-            Foreground="#ff9000"
-            Background="#252525" 
-            Margin="3"
-            ShowButtonSpinner="False"
-            TextAlignment="Center"
-            Maximum="2"
-            Minimum="0"
-            DefaultValue="0"/>
+                                MouseLeftButtonDown="TxtQos_OnMouseLeftButtonDown"
+                                MouseLeftButtonUp="TxtQos_OnMouseLeftButtonUp"
+                                Text="0"
+                                FontFamily="Arial"
+                                FontSize="18"
+                                Grid.Column="3" 
+                                Height="25"
+                                Padding="0"
+                                BorderThickness="0,0,0,1"
+                                BorderBrush="{StaticResource Color1}"
+                                Foreground="#ff9000"
+                                Background="#252525" 
+                                Margin="3"
+                                ShowButtonSpinner="False"
+                                TextAlignment="Center"
+                                Maximum="2"
+                                Minimum="0"
+                                DefaultValue="0"/>
 
         <Button 
-            Style="{DynamicResource BtnGraphic1}"
-            Height="25"
-            Width="25"
-            Grid.Column="4" 
-            Name="BtnRemoveHotkey"
-            Click="BtnRemoveHotkey_OnClick">
-            <Grid>
-                <Path 
-                    Data="{StaticResource Icon_Remove}" 
-                    Fill="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}"
-                    Stretch="Uniform"
-                    Width="25" 
-                    Height="25" />
-            </Grid>
-        </Button>
-        
-        <Button 
-            Style="{DynamicResource BtnGraphic1}"
-            Height="25"
-            Width="25"
-            Grid.Column="5" 
-            Click="BtnTest_OnClick"
-            Margin="0,0,0,0">
-            <Grid>
-                <Path 
-                    Data="{StaticResource Icon_Send}" 
-                    Fill="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}"
-                    Stretch="Uniform"
-                    Width="25" 
-                    Height="25" />
+                Style="{DynamicResource BtnGraphic1}"
+                Height="25"
+                Width="25"
+                Grid.Column="4" 
+                Name="BtnRemoveHotkey"
+                Click="BtnRemoveHotkey_OnClick">
+                <Grid>
+                    <Path 
+                        Data="{StaticResource Icon_Remove}" 
+                        Fill="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}"
+                        Stretch="Uniform"
+                        Width="25" 
+                        Height="25" />
+                </Grid>
+            </Button>
 
-            </Grid>
-        </Button>
+        <Button 
+                Style="{DynamicResource BtnGraphic1}"
+                Height="25"
+                Width="25"
+                Grid.Column="5" 
+                Click="BtnTest_OnClick"
+                Margin="0,0,0,0">
+                <Grid>
+                    <Path 
+                        Data="{StaticResource Icon_Send}" 
+                        Fill="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}"
+                        Stretch="Uniform"
+                        Width="25" 
+                        Height="25" />
+
+                </Grid>
+            </Button>
     </Grid>
+
 </UserControl>

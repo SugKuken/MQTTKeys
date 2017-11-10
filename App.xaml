@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:s="clr-namespace:System;assembly=mscorlib"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-             xmlns:local="clr-namespace:mqtt_hotkeys_test"
              StartupUri="Windows/MainWindow.xaml">
     <Application.Resources>
         <s:String x:Key="FooterDescription">MQTTKeys v0.0.1</s:String>

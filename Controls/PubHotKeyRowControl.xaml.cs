@@ -1,14 +1,12 @@
 ﻿using System;
+using mqtt_hotkeys_test.Windows;
 using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Threading;
 using NHotkey;
 using NHotkey.Wpf;
-using uPLibrary.Networking.M2Mqtt;
 using Xceed.Wpf.AvalonDock.Controls;
 
 namespace mqtt_hotkeys_test.Controls
@@ -42,49 +40,6 @@ namespace mqtt_hotkeys_test.Controls
                 }
             }
 
-        }
-
-        private void BtnTest_OnClick(object sender, RoutedEventArgs e)
-        {
-            PublishMqttMessage();
-        }
-
-        private void BtnHotKey_OnClick(object sender, RoutedEventArgs routedEventArgs)
-        {
-            // "Garbage collect" when user sets a different key
-            //try
-            //{
-            //    MainWindow.AllHotKeys.Remove((Key)Enum.Parse(typeof(Key), Binding.HotKey));
-            //    Console.WriteLine($"Removing {(Key)Enum.Parse(typeof(Key), Binding.HotKey)}");
-            //}
-            //catch (Exception ex)
-            //{
-            //    // Suppressed
-            //}
-
-
-
-            var window = new Windows.SelectHotKey(false) { Owner = Application.Current.MainWindow };
-            if (window.ShowDialog() == true)
-            {
-
-                var modKeysString = window.ModKeys.ToString();
-                var modKeysForConfig = modKeysString;
-                
-                var hotKeyLetter = window.HotKey.ToString();
-                modKeysString = CleanModifierKeysString(modKeysString);
-                BtnHotKey.Content = $"{modKeysString}+{window.HotKey}";
-                SetUpHotkey(window.HotKey, window.ModKeys);
-
-                // Create object for config
-                Binding = new PubBindingSettings
-                {
-                    HotKey = hotKeyLetter,
-                    ModKeys = modKeysForConfig
-                };
-
-                MainWindow.AllHotKeys.Add(window.HotKey);
-            }
         }
 
         private static string CleanModifierKeysString(string modKeysString)
@@ -128,7 +83,7 @@ namespace mqtt_hotkeys_test.Controls
             // TODO: implement retained pubs?
             try
             {
-                MainWindow._mqttClient.Publish(TxtTopic.Text,
+                MainWindow.MqttClient.Publish(TxtTopic.Text,
                    Encoding.UTF8.GetBytes(TxtMessage.Text),
                    byte.Parse(TxtQos.Text),
                    false);
@@ -140,19 +95,49 @@ namespace mqtt_hotkeys_test.Controls
         }
 
         // TODO: click and drag to set QoS
-        public Point mouseStartPos;
-        public Point mouseEndPos;
+        private Point _mouseStartPos;
+        private Point _mouseEndPos;
 
         private void TxtQos_OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            mouseStartPos = e.GetPosition(TxtQos);
-            Console.WriteLine(mouseStartPos);
+            _mouseStartPos = e.GetPosition(TxtQos);
+
+            Console.WriteLine(_mouseStartPos);
         }
 
         private void TxtQos_OnMouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            mouseEndPos = e.GetPosition(TxtQos);
-            Console.WriteLine(mouseEndPos);
+            _mouseEndPos = e.GetPosition(TxtQos);
+            Console.WriteLine(_mouseEndPos);
+        }
+
+        private void BtnTest_OnClick(object sender, RoutedEventArgs e)
+        {
+            PublishMqttMessage();
+        }
+
+        private void BtnHotKey_OnClick(object sender, RoutedEventArgs routedEventArgs)
+        {
+            var window = new SelectHotKey(false) { Owner = Application.Current.MainWindow };
+            if (window.ShowDialog() == true)
+            {
+                var modKeysString = window.ModKeys.ToString();
+                var modKeysForConfig = modKeysString;
+                var hotKeyLetter = window.HotKey.ToString();
+
+                modKeysString = CleanModifierKeysString(modKeysString);
+                BtnHotKey.Content = $"{modKeysString}+{window.HotKey}";
+                SetUpHotkey(window.HotKey, window.ModKeys);
+
+                // Create object for config
+                Binding = new PubBindingSettings
+                {
+                    HotKey = hotKeyLetter,
+                    ModKeys = modKeysForConfig
+                };
+
+                MainWindow.AllHotKeys.Add(window.HotKey);
+            }
         }
 
         private void BtnRemoveHotkey_OnClick(object sender, RoutedEventArgs e)

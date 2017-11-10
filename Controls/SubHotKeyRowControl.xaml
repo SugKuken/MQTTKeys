@@ -4,13 +4,12 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:wpfTool="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
-             xmlns:local="clr-namespace:mqtt_hotkeys_test.Controls"
              mc:Ignorable="d"
              Margin="0,5,0,0"
              Height="85"
              Width="802 ">
 
-    <Grid Height="80" Background="#252525" Grid.Row="0">
+    <Grid Height="80" Background="#252525">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="160"/>
             <ColumnDefinition Width="260"/>

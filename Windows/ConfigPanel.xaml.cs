@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Linq;
-using System.Net;
-using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
 using uPLibrary.Networking.M2Mqtt;
-using Xceed.Wpf.Toolkit;
 using MessageBox = System.Windows.MessageBox;
 
 namespace mqtt_hotkeys_test.Controls
@@ -17,11 +13,11 @@ namespace mqtt_hotkeys_test.Controls
     public partial class ConfigPanel : Window
     {
         public ConnectionSettings ConnSettings;
-        public MainWindow _parent;
+        public Windows.MainWindow _parent;
         public string workingIp = "";
 
 
-        public ConfigPanel(MainWindow parent)
+        public ConfigPanel(Windows.MainWindow parent)
         {
             ConnSettings = new ConnectionSettings();
             _parent = parent;
@@ -51,7 +47,7 @@ namespace mqtt_hotkeys_test.Controls
                 ConnSettings.MqttPassword = TxtPassword.Password;
 
                 _parent.SaveConnectionConfigToJson(ConnSettings);
-                _parent._connectionConfig = ConnSettings;
+                _parent.ConnectionConfig = ConnSettings;
                 Close();
 
             }

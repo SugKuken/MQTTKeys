@@ -1,20 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Runtime.InteropServices;
-using System.Security.Cryptography;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Forms;
 using System.Windows.Input;
 using WindowsInput;
 using WindowsInput.Native;
-using static WindowsInput.InputSimulator;
 using NHotkey;
-using NHotkey.Wpf;
-using uPLibrary.Networking.M2Mqtt;
 using Xceed.Wpf.AvalonDock.Controls;
 using Application = System.Windows.Application;
 using MessageBox = System.Windows.MessageBox;
@@ -28,10 +21,10 @@ namespace mqtt_hotkeys_test.Controls
     public partial class SubHotKeyRowControl : UserControl
     {
 
-        public List<VirtualKeyCode> modifierKeys = new List<VirtualKeyCode>();
-        public Key hotKey = 0;
+        public List<VirtualKeyCode> ModifierKeys = new List<VirtualKeyCode>();
+        public Key HotKey = 0;
         public SubBindingSettings Binding;
-        public SubscribeHelper subHelper;
+        public SubscribeHelper SubHelper;
 
         public SubHotKeyRowControl()
         {
@@ -40,24 +33,53 @@ namespace mqtt_hotkeys_test.Controls
 
         public void UpdateUi()
         {
-            if (Binding != null)
+            try
             {
-                TxtTopic.Text = Binding.SubTopic;
-                TxtTrigger.Text = Binding.TriggerMessage;
-                TxtReplyTopic.Text = Binding.PubTopic;
-                TxtReplyPayload.Text = Binding.ReplyMessage;
-                if (Enum.TryParse(Binding.ModKeys, true, out ModifierKeys modifierKeys) &&
-                    Enum.TryParse(Binding.HotKey, true, out Key keyLtr))
+                if (Binding != null)
                 {
-                    var modKeysString = CleanModifierKeysString(modifierKeys.ToString());
-                    BtnHotKey.Content = $"{modKeysString} + {keyLtr}";
-                    //SetUpKeyPress(keyLtr, modifierKeys);
+                    TxtTopic.Text = Binding.SubTopic;
+                    TxtTrigger.Text = Binding.TriggerMessage;
+                    TxtReplyTopic.Text = Binding.PubTopic;
+                    TxtReplyPayload.Text = Binding.ReplyMessage;
+                    if (Enum.TryParse(Binding.HotKey, true, out Key keyLtr))
+                    {
+                        HotKey = keyLtr;
+                        var modKeysString = CleanModifierKeysString(Binding.ModKeys);
+                        foreach (var keyStr in modKeysString.Split(new[] { ", " }, StringSplitOptions.None))
+                        {
+                            switch (keyStr.ToLower())
+                            {
+                                // TODO: (If not keyboard interface) Add L&R Control/shift/Win support (Tyler add buttons)
+                                case "control":
+                                    ModifierKeys.Add(VirtualKeyCode.CONTROL);
+                                    break;
+                                case "windows":
+                                    ModifierKeys.Add(VirtualKeyCode.LWIN);
+                                    break;
+                                case "alt":
+                                    ModifierKeys.Add((VirtualKeyCode)KeyInterop.VirtualKeyFromKey(Key.LeftAlt));
+                                    break;
+                                case "shift":
+                                    ModifierKeys.Add(VirtualKeyCode.SHIFT);
+                                    break;
+                            }
+                        }
+                        BtnHotKey.Content = $"{modKeysString} + {keyLtr}";
+                        //SetUpKeyPress(keyLtr, modifierKeys);
+                    }
+                    // Resub if loaded from config
+                    BtnSub_OnClick(this, null);
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex);
             }
         }
 
         private void BtnSub_OnClick(object sender, RoutedEventArgs e)
         {
+            Console.WriteLine("Subscribed");
             if (TxtTopic.Text == "" ||
                 TxtTrigger.Text == "" ||
                 // TODO: Check if this still works (changed from textbox.text -> button.content)
@@ -68,16 +90,16 @@ namespace mqtt_hotkeys_test.Controls
                 return;
             }
 
-            MainWindow.MqttTopics.Add(new MqttTopic
+            Windows.MainWindow.MqttTopics.Add(new MqttTopic
             {
                 QosLevel = byte.Parse(TxtQos.Text),
                 Topic = TxtTopic.Text
             });
 
-            subHelper = new SubscribeHelper()
+            SubHelper = new SubscribeHelper
             {
-                HotKey = hotKey,
-                modifierKeys = modifierKeys,
+                HotKey = HotKey,
+                modifierKeys = ModifierKeys,
                 PubTopic = TxtReplyTopic.Text,
                 Qos = TxtQos.Value ?? 0,
                 ReplyMessage = TxtReplyPayload.Text,
@@ -86,7 +108,7 @@ namespace mqtt_hotkeys_test.Controls
 
             };
 
-            MainWindow.AddMqttSub(subHelper);
+            Windows.MainWindow.AddMqttSub(SubHelper);
 
 
             //MainWindow._mqttClient.Unsubscribe(MainWindow.MqttTopics.Select(x => x.Topic).ToArray());
@@ -99,7 +121,7 @@ namespace mqtt_hotkeys_test.Controls
 
         }
 
-        //TODO: Move to MainWindow.xaml.cs?
+        //TODO: Move to MainWindow.xaml.cs? (DONE, testing)
         private void _mqttClient_MqttMsgPublishReceived(object sender, uPLibrary.Networking.M2Mqtt.Messages.MqttMsgPublishEventArgs e)
         {
             // TODO: Figure out why this fires multiple times?
@@ -118,11 +140,11 @@ namespace mqtt_hotkeys_test.Controls
                                       $"DupFlag: {e.DupFlag}\n" +
                                       $"QoS: {e.QosLevel}");
 
-                    VirtualKeyCode vKey = (VirtualKeyCode) KeyInterop.VirtualKeyFromKey(hotKey);
+                    VirtualKeyCode vKey = (VirtualKeyCode) KeyInterop.VirtualKeyFromKey(HotKey);
                     // Handle and press hotkey
                     var keyCodes = new List<VirtualKeyCode> {vKey};
 
-                    new InputSimulator().Keyboard.ModifiedKeyStroke(modifierKeys, keyCodes);
+                    new InputSimulator().Keyboard.ModifiedKeyStroke(ModifierKeys, keyCodes);
                     if (TxtReplyPayload.Text.Trim() != "")
                     {
                         if (string.Equals(TxtTrigger.Text, TxtReplyPayload.Text,
@@ -132,7 +154,7 @@ namespace mqtt_hotkeys_test.Controls
                             return;
                         }
                         var topic = TxtReplyTopic.Text.Trim() == "" ? TxtTopic.Text.Trim() : TxtReplyTopic.Text.Trim();
-                        MainWindow._mqttClient.Publish(topic,
+                        Windows.MainWindow.MqttClient.Publish(topic,
                             Encoding.UTF8.GetBytes(TxtReplyPayload.Text),
                             byte.Parse(TxtQos.Text),
                             false);
@@ -149,27 +171,27 @@ namespace mqtt_hotkeys_test.Controls
                 var modKeysString = window.ModKeys.ToString();
                 var modKeysForConfig = modKeysString;
                 var modKeysList = modKeysForConfig.Split(new [] {", "}, StringSplitOptions.None);
-                modifierKeys.Clear();
+                ModifierKeys.Clear();
                 foreach (var keyStr in modKeysList)
                 {
                     switch (keyStr.ToLower())
                     {
                         // TODO: (If not keyboard interface) Add L&R Control/shift/Win support (Tyler add buttons)
                         case "control":
-                            modifierKeys.Add(VirtualKeyCode.CONTROL);
+                            ModifierKeys.Add(VirtualKeyCode.CONTROL);
                             break;
                         case "windows":
-                            modifierKeys.Add(VirtualKeyCode.LWIN);
+                            ModifierKeys.Add(VirtualKeyCode.LWIN);
                             break;
                         case "alt":
-                            modifierKeys.Add((VirtualKeyCode)KeyInterop.VirtualKeyFromKey(Key.LeftAlt));
+                            ModifierKeys.Add((VirtualKeyCode)KeyInterop.VirtualKeyFromKey(Key.LeftAlt));
                             break;
                         case "shift":
-                            modifierKeys.Add(VirtualKeyCode.SHIFT);
+                            ModifierKeys.Add(VirtualKeyCode.SHIFT);
                             break;
                     }
                 }
-                hotKey = window.HotKey;
+                HotKey = window.HotKey;
                 var hotKeyLetter = window.HotKey.ToString();
                 modKeysString = CleanModifierKeysString(modKeysString);
                 BtnHotKey.Content = $"{modKeysString}+{window.HotKey}";
@@ -218,7 +240,7 @@ namespace mqtt_hotkeys_test.Controls
                 MessageBox.Show("Topic or message cannot be blank", "Invalid selections", MessageBoxButton.OK);
                 return;
             }
-            MainWindow._mqttClient.Publish(TxtTopic.Text,
+            Windows.MainWindow.MqttClient.Publish(TxtTopic.Text,
                        Encoding.UTF8.GetBytes(TxtReplyPayload.Text),
                        byte.Parse(TxtQos.Text),
                        false);

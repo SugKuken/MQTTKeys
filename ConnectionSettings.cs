@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace mqtt_hotkeys_test
+﻿namespace mqtt_hotkeys_test
 {
     public class ConnectionSettings
     {
@@ -12,7 +6,7 @@ namespace mqtt_hotkeys_test
         public string MqttUser { get; set; }
         public string MqttPassword { get; set; }
 
-        public string ToString()
+        public override string ToString()
         {
             return $"IP:{BrokerIp}\nUser:{MqttUser}\nPass:{MqttPassword}";
         }

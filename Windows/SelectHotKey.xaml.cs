@@ -53,8 +53,7 @@ namespace mqtt_hotkeys_test.Windows
                 {
                     // TODO: If keyboard interface is implemented, enable space
                 }
-                var parsedMKeys = "";
-                parsedMKeys = string.Join(",", _outKeys);
+                var parsedMKeys = string.Join(",", _outKeys);
                 if (Enum.TryParse(parsedMKeys, true, out ModifierKeys tempKeys))
                     ModKeys = tempKeys;
                 if (ModKeys == ModifierKeys.None)
