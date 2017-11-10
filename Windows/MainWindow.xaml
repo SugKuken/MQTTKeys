@@ -24,7 +24,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="40" />
+            <RowDefinition Height="15" />
         </Grid.RowDefinitions>
 
         <Button Name="BtnAddSubThing"
@@ -49,14 +49,14 @@
         <TabControl Name="TabControlMainWindow" Grid.Row="0" SelectionChanged="TabControl_SelectionChanged" Grid.RowSpan="2">
             <TabItem Header="Publish" Style="{DynamicResource PubSubMenu}" >
                 <ScrollViewer IsTabStop="True" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" Background="#464646" >
-                    <StackPanel Name="PubStackPanel" CanHorizontallyScroll="True" Margin="0,7,0,0">
-                        <windows:PubHotKeyRowControl Loaded="HotKeyRowControl_Loaded" />
+                    <StackPanel Name="PubStackPanel" CanHorizontallyScroll="True" Margin="0,5,0,0">
+                        <windows:PubHotKeyRowControl Loaded="HotKeyRowControl_Loaded"/>
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
-            <TabItem Name="Subscribe" Header="Subscribe" Style="{DynamicResource PubSubMenu}" >
+            <TabItem Name="Subscribe" Header="Subscribe" Style="{DynamicResource PubSubMenu}">
                 <ScrollViewer IsTabStop="True" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" Background="#464646">
-                    <StackPanel Name="SubStackPanel" CanHorizontallyScroll="True"  Margin="0,7,0,0">
+                    <StackPanel Name="SubStackPanel" CanHorizontallyScroll="True" Margin="0,5,0,0" >
                         <windows:SubHotKeyRowControl Loaded="HotKeyRowControl_Loaded" />
                     </StackPanel>
                 </ScrollViewer>
@@ -92,5 +92,24 @@
                 Name="MenuItemClose"
                 Content="Exit"/>
         </StackPanel>
+        <Grid Grid.Row="1" Background="{StaticResource ColorBG1}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock 
+                Text="{StaticResource FooterDescription}"
+                FontFamily="Calibri"
+                Foreground="#777"
+                Margin="5,0,0,0"
+                Grid.Column="0"/>
+            <TextBlock 
+                Text="Big Dingle"
+                FontFamily="Calibri"
+                Foreground="#777"
+                Margin="5,0,5,0"
+                Grid.Column="1"
+                HorizontalAlignment="Right"/>
+        </Grid>
     </Grid>
 </Window>

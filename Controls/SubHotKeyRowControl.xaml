@@ -5,16 +5,18 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:wpfTool="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
              xmlns:local="clr-namespace:mqtt_hotkeys_test.Windows"
-             mc:Ignorable="d" 
-             d:DesignHeight="70" d:DesignWidth="800">
-    
-    <Grid Background="#454545">
+             mc:Ignorable="d"
+             Margin="0,5,0,0"
+             Height="85"
+             Width="802 ">
+
+    <Grid Height="80" Background="#252525" Grid.Row="0">
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="160"/>
+            <ColumnDefinition Width="190"/>
             <ColumnDefinition Width="260"/>
             <ColumnDefinition Width="260"/>
             <ColumnDefinition Width="40"/>
-            <ColumnDefinition Width="70"/>
+            <ColumnDefinition Width="40"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
@@ -25,67 +27,83 @@
         <wpfTool:WatermarkTextBox Name="TxtHotKey"
             Style="{DynamicResource TxtBoxPubSub1}"
             MouseDoubleClick="TxtHotKey_OnMouseDoubleClick"
-            Watermark="Set key"
+            Cursor="Arrow"
+            Text="Set key"
+            BorderThickness="0,0,1,1"
             Grid.Column="0"
             Grid.Row="0"
-            Margin="3"
+            Grid.RowSpan="2"
+            Margin="3,3,10,3"
             IsReadOnly="True" />
 
-        <wpfTool:WatermarkTextBox 
+        <wpfTool:WatermarkTextBox Name="TxtTopic"
             Style="{DynamicResource TxtBoxPubSub1}"
             Grid.Column="1" 
             Margin="3"
-            Watermark="Topic"
-            Name="TxtTopic"/>
-
-        <wpfTool:WatermarkTextBox 
-            Style="{DynamicResource TxtBoxPubSub1}"
-            Grid.Column="2" 
-            Margin="3"
-            Watermark="Enter trigger payload..."
-            Name="TxtTrigger"/>
+            Watermark="Trigger Topic"/>
 
         <wpfTool:WatermarkTextBox 
             Style="{DynamicResource TxtBoxPubSub1}"
             Grid.Column="2"
-            Grid.Row="1"
+            Grid.ColumnSpan="2"
             Margin="3"
-            Watermark="Enter reply payload..."
-            Name="TxtReplyPayload"/>
+            Watermark="Trigger Message"
+            Name="TxtTrigger"/>
 
-
-        <wpfTool:WatermarkTextBox 
+        <wpfTool:WatermarkTextBox Name="TxtReplyTopic"
             Style="{DynamicResource TxtBoxPubSub1}"
             Grid.Column="1"
             Grid.Row="1"
             Margin="3"
-            Watermark="Enter reply topic..."
-            Name="TxtReplyTopic"/>
+            Watermark="Reply Topic" />
+
+        <wpfTool:WatermarkTextBox Name="TxtReplyPayload"
+            Style="{DynamicResource TxtBoxPubSub1}"
+            Grid.Column="2"
+            Grid.Row="1"
+            Margin="3"
+            Watermark="Reply Message" />
 
         <wpfTool:IntegerUpDown
+            Height="25"
             FontFamily="Arial"
             FontSize="18"
             Grid.Column="3"
             Grid.Row="1"
-            BorderThickness="0"
-            FontWeight="Bold"
+            BorderThickness="0,0,0,1"
+            BorderBrush="{StaticResource Color1}"
             Foreground="#ff9000"
             Background="#252525" 
             Margin="3"
             ShowButtonSpinner="False"
-            Text="2"
+            Text="0"
             TextAlignment="Center"
-            DefaultValue="2"
+            DefaultValue="0"
             MouseLeftButtonDown="TxtQos_OnMouseLeftButtonDown"
             MouseLeftButtonUp="TxtQos_OnMouseLeftButtonUp"
             Name="TxtQos"/>
-        
+        <Button
+            Style="{DynamicResource BtnGraphic1}"
+            Grid.Column="4"
+            Grid.Row="0"
+            Click="BtnSub_OnClick"
+            Margin="0">
+            <Grid>
+                <Path 
+                    Data="{StaticResource Icon_Sub}" 
+                    Fill="{Binding Foreground, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=Button}}"
+                    Stretch="Uniform"
+                    Margin="0,3,0,0"
+                    Width="25" 
+                    Height="25" />
+            </Grid>
+        </Button>
         <Button 
             Style="{DynamicResource BtnGraphic1}"
             Height="25"
             Width="25"
-            Grid.Column="3"
-            Grid.Row="0"
+            Grid.Column="4"
+            Grid.Row="1"
             Click="BtnRemoveHotkey_OnClick">
             <Grid>
                 <Path 
@@ -96,12 +114,5 @@
                     Height="25" />
             </Grid>
         </Button>
-        <Button 
-            Style="{DynamicResource BtnTopBarMenu}"
-            Grid.Column="4" 
-            Background="#ff9000"
-            Content="Sub"
-            Click="BtnSub_OnClick"
-            Margin="1"/>
     </Grid>
 </UserControl>

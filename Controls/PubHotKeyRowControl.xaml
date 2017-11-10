@@ -6,9 +6,11 @@
              xmlns:xctk="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
              xmlns:local="clr-namespace:mqtt_hotkeys_test.Windows"
              mc:Ignorable="d" 
-             d:DesignHeight="40" d:DesignWidth="800">
-
-    <Grid Background="#454545">
+             Background="#252525"
+             Margin="0,5,0,5"
+             Height="40"
+             Width="802">
+    <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="160"/>
             <ColumnDefinition Width="260"/>
@@ -23,7 +25,9 @@
             Style="{DynamicResource TxtBoxPubSub1}"
             MouseDoubleClick="TxtHotKey_OnMouseDoubleClick"
             Grid.Column="0"
-            Watermark="Set Hotkey"
+            Text="Set Hotkey"
+            Cursor="Arrow"
+            BorderThickness="0,0,1,1"
             Margin="3"
             IsReadOnly="True" />
 
@@ -43,13 +47,14 @@
         <xctk:IntegerUpDown Name="TxtQos"
             MouseLeftButtonDown="TxtQos_OnMouseLeftButtonDown"
             MouseLeftButtonUp="TxtQos_OnMouseLeftButtonUp"
-            Text="2"
+            Text="0"
             FontFamily="Arial"
             FontSize="18"
             Grid.Column="3" 
             Height="25"
             Padding="0"
-            BorderThickness="0"
+            BorderThickness="0,0,0,1"
+            BorderBrush="{StaticResource Color1}"
             Foreground="#ff9000"
             Background="#252525" 
             Margin="3"

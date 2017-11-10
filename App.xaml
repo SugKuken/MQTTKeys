@@ -1,10 +1,16 @@
 ﻿<Application x:Class="mqtt_hotkeys_test.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:s="clr-namespace:System;assembly=mscorlib"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:local="clr-namespace:mqtt_hotkeys_test"
              StartupUri="Windows/MainWindow.xaml">
     <Application.Resources>
+        <s:String x:Key="FooterDescription">MQTTKeys v0.0.1</s:String>
+        <SolidColorBrush x:Key="Color1">#FF9000</SolidColorBrush>
+        <SolidColorBrush x:Key="ColorSelected">#FFEE00</SolidColorBrush>
+        <SolidColorBrush x:Key="ColorMouseOver">#FFAA00</SolidColorBrush>
+        <SolidColorBrush x:Key="ColorBG1">#252525</SolidColorBrush>
         <Style x:Key="BtnDefault" TargetType="{x:Type Button}">
             <Setter Property="Background" Value="#ff9000" />
             <Setter Property="BorderThickness" Value="0" />
@@ -34,7 +40,7 @@
             </Style.Triggers>
         </Style>
         <Style x:Key="BtnTopBarMenu" TargetType="{x:Type Button}">
-            <Setter Property="Background" Value="#ff9000" />
+            <Setter Property="Background" Value="Transparent" />
             <Setter Property="Height" Value="32" />
             <Setter Property="TextElement.FontFamily" Value="Typo Style Demo"/>
             <Setter Property="TextElement.FontSize" Value="19" />
@@ -43,22 +49,26 @@
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type Button}">
-                        <Grid Background="{TemplateBinding Background}">
-                            <ContentPresenter 
-                                x:Name="MyContentPresenter"
-                                Content="{TemplateBinding Content}"
-                                HorizontalAlignment="Center" 
-                                VerticalAlignment="Center" 
-                                Margin="10,0,10,0"/>
+                        <Grid>
+                            <Border x:Name="MenuBtnBorder" CornerRadius="3,3,3,3" Background="{StaticResource Color1}" BorderThickness="0" >
+                                <ContentPresenter x:Name="MyContentPresenter"
+                                    Content="{TemplateBinding Content}"
+                                    HorizontalAlignment="Center" 
+                                    VerticalAlignment="Center" 
+                                    Margin="10,0,10,0"/>
+                            </Border>
                         </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="MenuBtnBorder" Property="Background" Value="{StaticResource ColorMouseOver}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="MenuBtnBorder" Property="Background" Value="{StaticResource ColorSelected}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <Style.Triggers>
-                <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#FFAA00"/>
-                </Trigger>
-            </Style.Triggers>
         </Style>
         <Style x:Key="BtnGraphic1" TargetType="{x:Type Button}">
             <Setter Property="Foreground" Value="#FF9000" />
@@ -80,6 +90,9 @@
                 </Setter.Value>
             </Setter>
             <Style.Triggers>
+                <Trigger Property="IsEnabled" Value="False" >
+                    <Setter Property="Visibility" Value="Hidden" />
+                </Trigger>
                 <Trigger Property="IsMouseOver" Value="True">
                     <Setter Property="Foreground" Value="#FFAA00"/>
                 </Trigger>
@@ -107,7 +120,7 @@
             <Setter Property="TextElement.FontSize" Value="17"/>
             <Setter Property="TextElement.FontWeight" Value="Regular"/>
             <Setter Property="Foreground" Value="#FF9000" />
-            <Setter Property="Background" Value="#252525" />
+            <Setter Property="Background" Value="Transparent" />
             <Setter Property="Padding" Value="2,2,0,0"/>
             <Setter Property="BorderThickness" Value="0,0,0,1" />
             <Setter Property="BorderBrush" Value="#FF9000" />
@@ -170,28 +183,27 @@
                 <Setter.Value>
                     <ControlTemplate TargetType="{x:Type TabItem}">
                         <Grid Name="Panel" Margin="2,4,2,4">
-                            <ContentPresenter 
-                                x:Name="ContentSite"
-                                VerticalAlignment="Center"
-                                HorizontalAlignment="Center"
-                                ContentSource="Header"
-                                Margin="10,0,10,0"/>
+                            <Border x:Name="TabBtnBorder" CornerRadius="3,3,3,3" Background="{StaticResource Color1}" BorderThickness="0" >
+                                <ContentPresenter 
+                                    x:Name="ContentSite"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center"
+                                    ContentSource="Header"
+                                    Margin="10,0,10,0" />
+                            </Border>
                         </Grid>
                         <ControlTemplate.Triggers>
-                            <Trigger Property="IsSelected" Value="False">
-                                <Setter TargetName="Panel" Property="Background" Value="#FF9000" />
-                            </Trigger>
                             <MultiTrigger>
                                 <MultiTrigger.Conditions>
                                     <Condition Property="IsSelected" Value="False" />
                                     <Condition Property="IsMouseOver" Value="True" />
                                 </MultiTrigger.Conditions>
                                 <MultiTrigger.Setters>
-                                    <Setter TargetName="Panel" Property="Background" Value="#FFAA00" />
+                                    <Setter TargetName="TabBtnBorder" Property="Background" Value="{StaticResource ColorMouseOver}" />
                                 </MultiTrigger.Setters>
                             </MultiTrigger>
                             <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="Panel" Property="Background" Value="#FFEE00" />
+                                <Setter TargetName="TabBtnBorder" Property="Background" Value="{StaticResource ColorSelected}" />
                             </Trigger>
                         </ControlTemplate.Triggers>
                     </ControlTemplate>
@@ -199,7 +211,8 @@
             </Setter>
         </Style>
         <Geometry x:Key="Icon_Add">M127.993,251.016C60.186,251.016,5.022,195.831,5.022,128S60.186,4.984,127.993,4.984A123.016,123.016,0,0,1,127.993,251.016Zm0-234.747A111.732,111.732,0,1,0,239.7,128,111.836,111.836,0,0,0,127.993,16.269Zm15.026,179.188H112.966V143.032H60.561V112.968h52.405V60.544h30.053v52.424h52.393v30.064H143.019v52.425Z</Geometry>
-        <Geometry x:Key="Icon_Send">M59,234l52-106L59,22H148.95L198,128,148.95,234H59Z</Geometry>
-        <Geometry x:Key="Icon_Remove">M127.993,251.016C60.186,251.016,5.022,195.831,5.022,128S60.186,4.984,127.993,4.984A123.016,123.016,0,0,1,127.993,251.016Zm0-234.747A111.732,111.732,0,1,0,239.7,128,111.836,111.836,0,0,0,127.993,16.269ZM36,149V108H219.007v41H36Z</Geometry>
+        <Geometry x:Key="Icon_Send">M3,19V5A2,2 0 0,1 5,3H19A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19M17,12L12,7V10H8V14H12V17L17,12Z</Geometry>
+        <Geometry x:Key="Icon_Remove">M19,3H16.3H7.7H5A2,2 0 0,0 3,5V7.7V16.4V19A2,2 0 0,0 5,21H7.7H16.4H19A2,2 0 0,0 21,19V16.3V7.7V5A2,2 0 0,0 19,3M15.6,17L12,13.4L8.4,17L7,15.6L10.6,12L7,8.4L8.4,7L12,10.6L15.6,7L17,8.4L13.4,12L17,15.6L15.6,17Z</Geometry>
+        <Geometry x:Key="Icon_Sub">M4,4H20A1,1 0 0,1 21,5V9A1,1 0 0,1 20,10H4A1,1 0 0,1 3,9V5A1,1 0 0,1 4,4M9,8H10V6H9V8M5,6V8H7V6H5M8,16H11V13H13V16H16V18H13V21H11V18H8V16Z</Geometry>
     </Application.Resources>
 </Application>
