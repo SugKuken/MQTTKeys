@@ -1,10 +1,10 @@
-﻿<Window x:Class="mqtt_hotkeys_test.Windows.MainWindow"
+﻿<Window x:Class="mqtt_hotkeys_test.Controls.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:mqtt_hotkeys_test"
-        xmlns:windows="clr-namespace:mqtt_hotkeys_test.Windows"
+        xmlns:windows="clr-namespace:mqtt_hotkeys_test.Controls"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         mc:Ignorable="d"
         Title="MQTTKeys"
@@ -56,7 +56,7 @@
             </TabItem>
             <TabItem Name="Subscribe" Header="Subscribe" Style="{DynamicResource PubSubMenu}">
                 <ScrollViewer IsTabStop="True" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" Background="#464646">
-                    <StackPanel Name="SubStackPanel" CanHorizontallyScroll="True" Margin="0,5,0,0" >
+                    <StackPanel Name="SubStackPanel" CanHorizontallyScroll="True" Margin="0,5,0,0">
                         <windows:SubHotKeyRowControl Loaded="HotKeyRowControl_Loaded" />
                     </StackPanel>
                 </ScrollViewer>

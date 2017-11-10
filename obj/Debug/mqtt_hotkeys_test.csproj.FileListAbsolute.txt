@@ -4,7 +4,6 @@ c:\users\kdsrevival\documents\visual studio 2017\Projects\mqtt_hotkeys_test\mqtt
 c:\users\kdsrevival\documents\visual studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\bin\Debug\M2Mqtt.Net.dll
 c:\users\kdsrevival\documents\visual studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\bin\Debug\System.Runtime.InteropServices.RuntimeInformation.dll
 c:\users\kdsrevival\documents\visual studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\bin\Debug\M2Mqtt.Net.pdb
-c:\users\kdsrevival\documents\visual studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\bin\Debug\Microsoft.Extensions.DependencyInjection.Abstractions.xml
 c:\users\kdsrevival\documents\visual studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\bin\Debug\Microsoft.Extensions.Logging.xml
 c:\users\kdsrevival\documents\visual studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\bin\Debug\Microsoft.Extensions.Logging.Abstractions.xml
 c:\users\kdsrevival\documents\visual studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\obj\Debug\mqtt_hotkeys_test.csprojResolveAssemblyReference.cache
@@ -92,3 +91,4 @@ C:\Users\Spogton\Documents\GitHub\MQTTKeys\bin\Debug\WindowsInput.dll
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\bin\Debug\WindowsInput.xml
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Controls\SubHotKeyRowControl.baml
 C:\Users\Spogton\Documents\GitHub\MQTTKeys\obj\Debug\Controls\PubHotKeyRowControl.baml
+C:\Users\KDSRevival\Documents\Visual Studio 2017\Projects\mqtt_hotkeys_test\mqtt_hotkeys_test\bin\Debug\WindowsInput.dll

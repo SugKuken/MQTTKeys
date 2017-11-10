@@ -3,18 +3,22 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
+using WindowsInput;
+using WindowsInput.Native;
 using mqtt_hotkeys_test.Properties;
 using Newtonsoft.Json;
 using uPLibrary.Networking.M2Mqtt;
 using MessageBox = System.Windows.MessageBox;
 
-namespace mqtt_hotkeys_test.Windows
+namespace mqtt_hotkeys_test.Controls
 {
     /// <summary>
     ///     Interaction logic for MainWindow.xaml
@@ -25,6 +29,7 @@ namespace mqtt_hotkeys_test.Windows
         public static MqttClient _mqttClient = new MqttClient("localhost");
         public ConnectionSettings _connectionConfig;
         public static List<MqttTopic> MqttTopics = new List<MqttTopic>();
+        public static List<SubscribeHelper> ActiveSubscriptions = new List<SubscribeHelper>();
         public static List<Key> AllHotKeys = new List<Key>();
 
         public MainWindow()
@@ -91,6 +96,54 @@ namespace mqtt_hotkeys_test.Windows
 
             // Load .json file of previous binds if exists
             LoadBindingsFromJson();
+            _mqttClient.MqttMsgPublishReceived += _mqttClient_MqttMsgPublishReceived;
+        }
+
+        private void _mqttClient_MqttMsgPublishReceived(object sender, uPLibrary.Networking.M2Mqtt.Messages.MqttMsgPublishEventArgs e)
+        {
+            Console.WriteLine("Mqtt handler fired");
+            foreach (var subBinding in ActiveSubscriptions)
+            {
+                Console.WriteLine($"sub topic: {subBinding.SubTopic}\n" +
+                                  $"trig msg: {subBinding.TriggerMessage}");
+                if (e.Topic == subBinding.SubTopic &&
+                    !e.DupFlag &&
+                    Encoding.UTF8.GetString(e.Message) == subBinding.TriggerMessage)
+                {
+                    Console.WriteLine($"Message received on topic [{e.Topic}]: {Encoding.UTF8.GetString(e.Message)}\n" +
+                                      $"DupFlag: {e.DupFlag}\n" +
+                                      $"QoS: {e.QosLevel}");
+
+                    VirtualKeyCode vKey = (VirtualKeyCode)KeyInterop.VirtualKeyFromKey(subBinding.HotKey);
+                    // Handle and press hotkey
+                    var keyCodes = new List<VirtualKeyCode> { vKey };
+
+                    foreach (var subBindingModifierKey in subBinding.modifierKeys) 
+                    {
+                        Console.WriteLine(subBindingModifierKey.ToString());
+                    }
+                    Console.WriteLine(keyCodes.FirstOrDefault());
+                    // TODO: When firing mqtt from keystroke, it will continually retrigger. find possible fix?
+                    new InputSimulator().Keyboard.ModifiedKeyStroke(subBinding.modifierKeys, keyCodes);
+
+
+                    if (subBinding.ReplyMessage.Trim() != "")
+                    {
+                        if (string.Equals(subBinding.TriggerMessage, subBinding.ReplyMessage,
+                            StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            MessageBox.Show("Reply payload and trigger payload cannot be the same!");
+                            return;
+                        }
+                        var topic = subBinding.PubTopic.Trim() == "" ? subBinding.SubTopic.Trim() : subBinding.PubTopic.Trim();
+                        _mqttClient.Publish(topic,
+                            Encoding.UTF8.GetBytes(subBinding.ReplyMessage),
+                            byte.Parse(subBinding.Qos.ToString()),
+                            false);
+                    }
+
+                }
+            }
         }
 
         private ConnectionSettings LoadConnectionSettingsFromJson()
@@ -304,7 +357,7 @@ namespace mqtt_hotkeys_test.Windows
 
         }
 
-        private void TabControl_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        private void TabControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }
@@ -312,6 +365,21 @@ namespace mqtt_hotkeys_test.Windows
         public void RemovePubHotKeyAtIndex(int index)
         {
             this.PubStackPanel.Children.RemoveAt(index);
+        }
+
+        public static void AddMqttSub(SubscribeHelper subHelper)
+        {
+             // TODO: Check if necessary
+            MqttTopics = MqttTopics
+                .GroupBy(x => x.Topic)
+                .Select(x => x.First())
+                .ToList();
+            _mqttClient.Unsubscribe(MqttTopics.Select(x => x.Topic).ToArray());
+
+            _mqttClient.Subscribe(MqttTopics.Select(x => x.Topic).ToArray(),
+                                  MqttTopics.Select(x => x.QosLevel).ToArray());
+            MqttTopics.ForEach(Console.WriteLine);
+            ActiveSubscriptions.Add(subHelper);
         }
     }
 }

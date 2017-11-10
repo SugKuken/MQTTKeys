@@ -9,7 +9,7 @@ using uPLibrary.Networking.M2Mqtt;
 using Xceed.Wpf.Toolkit;
 using MessageBox = System.Windows.MessageBox;
 
-namespace mqtt_hotkeys_test.Windows
+namespace mqtt_hotkeys_test.Controls
 {
     /// <summary>
     ///     Interaction logic for ConfigPanel.xaml

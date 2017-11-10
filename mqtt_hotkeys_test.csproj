@@ -107,6 +107,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="JsonConfigHelper.cs" />
+    <Compile Include="SubscribeHelper.cs" />
     <Compile Include="SubBindingSettings.cs" />
     <Compile Include="PubBindingSettings.cs" />
     <Compile Include="ConnectionSettings.cs" />

@@ -20,7 +20,7 @@ using Application = System.Windows.Application;
 using MessageBox = System.Windows.MessageBox;
 using UserControl = System.Windows.Controls.UserControl;
 
-namespace mqtt_hotkeys_test.Windows
+namespace mqtt_hotkeys_test.Controls
 {
     /// <summary>
     ///     Interaction logic for HotKeyRowControl.xaml
@@ -31,6 +31,7 @@ namespace mqtt_hotkeys_test.Windows
         public List<VirtualKeyCode> modifierKeys = new List<VirtualKeyCode>();
         public Key hotKey = 0;
         public SubBindingSettings Binding;
+        public SubscribeHelper subHelper;
 
         public SubHotKeyRowControl()
         {
@@ -49,7 +50,7 @@ namespace mqtt_hotkeys_test.Windows
                     Enum.TryParse(Binding.HotKey, true, out Key keyLtr))
                 {
                     var modKeysString = CleanModifierKeysString(modifierKeys.ToString());
-                    TxtHotKey.Text = $"{modKeysString} + {keyLtr}";
+                    BtnHotKey.Content = $"{modKeysString} + {keyLtr}";
                     //SetUpKeyPress(keyLtr, modifierKeys);
                 }
             }
@@ -59,7 +60,8 @@ namespace mqtt_hotkeys_test.Windows
         {
             if (TxtTopic.Text == "" ||
                 TxtTrigger.Text == "" ||
-                TxtHotKey.Text == "")
+                // TODO: Check if this still works (changed from textbox.text -> button.content)
+                (string)BtnHotKey.Content == "")
             {
                 // TODO: Change all MessageBoxes to custom popup
                 MessageBox.Show("You need to set a topic, trigger payload, and hotkey!");
@@ -72,17 +74,32 @@ namespace mqtt_hotkeys_test.Windows
                 Topic = TxtTopic.Text
             });
 
-            // TODO: Check if necessary
-            MainWindow._mqttClient.Unsubscribe(MainWindow.MqttTopics.Select(x => x.Topic).ToArray());
+            subHelper = new SubscribeHelper()
+            {
+                HotKey = hotKey,
+                modifierKeys = modifierKeys,
+                PubTopic = TxtReplyTopic.Text,
+                Qos = TxtQos.Value ?? 0,
+                ReplyMessage = TxtReplyPayload.Text,
+                SubTopic = TxtTopic.Text,
+                TriggerMessage = TxtTrigger.Text
 
-            MainWindow._mqttClient.Subscribe(MainWindow.MqttTopics.Select(x=>x.Topic).ToArray(), 
-                                             MainWindow.MqttTopics.Select(x=>x.QosLevel).ToArray());
+            };
 
-            // TODO: Do this on init instead of per control?
-            MainWindow._mqttClient.MqttMsgPublishReceived += _mqttClient_MqttMsgPublishReceived;
+            MainWindow.AddMqttSub(subHelper);
+
+
+            //MainWindow._mqttClient.Unsubscribe(MainWindow.MqttTopics.Select(x => x.Topic).ToArray());
+
+            //MainWindow._mqttClient.Subscribe(MainWindow.MqttTopics.Select(x=>x.Topic).ToArray(), 
+            //                                 MainWindow.MqttTopics.Select(x=>x.QosLevel).ToArray());
+
+            // TODO: Do this on init instead of per control? (Move to MainWindow.xaml.cs?)
+            //MainWindow._mqttClient.MqttMsgPublishReceived += _mqttClient_MqttMsgPublishReceived;
 
         }
 
+        //TODO: Move to MainWindow.xaml.cs?
         private void _mqttClient_MqttMsgPublishReceived(object sender, uPLibrary.Networking.M2Mqtt.Messages.MqttMsgPublishEventArgs e)
         {
             // TODO: Figure out why this fires multiple times?
@@ -124,9 +141,9 @@ namespace mqtt_hotkeys_test.Windows
             });
         }
 
-        private void TxtHotKey_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void BtnHotKey_OnClick(object sender, RoutedEventArgs routedEventArgs)
         {
-            var window = new SelectHotKey(true) { Owner = Application.Current.MainWindow };
+            var window = new Windows.SelectHotKey(true) { Owner = Application.Current.MainWindow };
             if (window.ShowDialog() == true)
             {
                 var modKeysString = window.ModKeys.ToString();
@@ -137,7 +154,7 @@ namespace mqtt_hotkeys_test.Windows
                 {
                     switch (keyStr.ToLower())
                     {
-                        // TODO: (If not keyboard interface) Add L&R Control/shift support (Tyler add buttons)
+                        // TODO: (If not keyboard interface) Add L&R Control/shift/Win support (Tyler add buttons)
                         case "control":
                             modifierKeys.Add(VirtualKeyCode.CONTROL);
                             break;
@@ -145,30 +162,32 @@ namespace mqtt_hotkeys_test.Windows
                             modifierKeys.Add(VirtualKeyCode.LWIN);
                             break;
                         case "alt":
-                            modifierKeys.Add(VirtualKeyCode.MENU);
+                            modifierKeys.Add((VirtualKeyCode)KeyInterop.VirtualKeyFromKey(Key.LeftAlt));
                             break;
                         case "shift":
                             modifierKeys.Add(VirtualKeyCode.SHIFT);
                             break;
                     }
                 }
-
+                hotKey = window.HotKey;
                 var hotKeyLetter = window.HotKey.ToString();
                 modKeysString = CleanModifierKeysString(modKeysString);
-                TxtHotKey.Text = $"{modKeysString} + {window.HotKey}";
+                BtnHotKey.Content = $"{modKeysString}+{window.HotKey}";
                 // Create object for config
                 Binding = new SubBindingSettings
                 {
                     HotKey = hotKeyLetter,
                     ModKeys = modKeysForConfig
                 };
+
+
             }
         }
 
         private static string CleanModifierKeysString(string modKeysString)
         {
             modKeysString = modKeysString.Replace("Windows", "Win");
-            modKeysString = modKeysString.Replace(",", " +");
+            modKeysString = modKeysString.Replace(",", "+");
             return modKeysString;
         }
 
@@ -233,7 +252,6 @@ namespace mqtt_hotkeys_test.Windows
             {
                 Console.WriteLine(ex);
             }
-
         }
     }
 }

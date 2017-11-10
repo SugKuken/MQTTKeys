@@ -10,5 +10,10 @@ namespace mqtt_hotkeys_test
     {
         public string Topic { get; set; }
         public byte QosLevel { get; set; }
+
+        public override string ToString()
+        {
+            return Topic;
+        }
     }
 }

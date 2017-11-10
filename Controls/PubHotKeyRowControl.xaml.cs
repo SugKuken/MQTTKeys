@@ -5,12 +5,13 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Threading;
 using NHotkey;
 using NHotkey.Wpf;
 using uPLibrary.Networking.M2Mqtt;
 using Xceed.Wpf.AvalonDock.Controls;
 
-namespace mqtt_hotkeys_test.Windows
+namespace mqtt_hotkeys_test.Controls
 {
     /// <summary>
     ///     Interaction logic for HotKeyRowControl.xaml
@@ -36,10 +37,11 @@ namespace mqtt_hotkeys_test.Windows
                     Enum.TryParse(Binding.HotKey, true, out Key keyLtr))
                 {
                     var modKeysString = CleanModifierKeysString(modifierKeys.ToString());
-                    TxtHotKey.Text = $"{modKeysString} + {keyLtr}";
+                    BtnHotKey.Content = $"{modKeysString} + {keyLtr}";
                     SetUpHotkey(keyLtr, modifierKeys);
                 }
             }
+
         }
 
         private void BtnTest_OnClick(object sender, RoutedEventArgs e)
@@ -47,20 +49,22 @@ namespace mqtt_hotkeys_test.Windows
             PublishMqttMessage();
         }
 
-        private void TxtHotKey_OnMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void BtnHotKey_OnClick(object sender, RoutedEventArgs routedEventArgs)
         {
             // "Garbage collect" when user sets a different key
-            try
-            {
-                MainWindow.AllHotKeys.Remove((Key)Enum.Parse(typeof(Key), Binding.HotKey));
-                Console.WriteLine($"Removing {(Key)Enum.Parse(typeof(Key), Binding.HotKey)}");
-            }
-            catch (Exception ex)
-            {
-                // Suppressed
-            }
+            //try
+            //{
+            //    MainWindow.AllHotKeys.Remove((Key)Enum.Parse(typeof(Key), Binding.HotKey));
+            //    Console.WriteLine($"Removing {(Key)Enum.Parse(typeof(Key), Binding.HotKey)}");
+            //}
+            //catch (Exception ex)
+            //{
+            //    // Suppressed
+            //}
 
-            var window = new SelectHotKey(false) { Owner = Application.Current.MainWindow };
+
+
+            var window = new Windows.SelectHotKey(false) { Owner = Application.Current.MainWindow };
             if (window.ShowDialog() == true)
             {
 
@@ -69,7 +73,7 @@ namespace mqtt_hotkeys_test.Windows
                 
                 var hotKeyLetter = window.HotKey.ToString();
                 modKeysString = CleanModifierKeysString(modKeysString);
-                TxtHotKey.Text = $"{modKeysString} + {window.HotKey}";
+                BtnHotKey.Content = $"{modKeysString}+{window.HotKey}";
                 SetUpHotkey(window.HotKey, window.ModKeys);
 
                 // Create object for config
@@ -94,11 +98,11 @@ namespace mqtt_hotkeys_test.Windows
         {
             try
             {
-                HotkeyManager.Current.AddOrReplace(TxtTopic.Text + TxtHotKey.Text, key, modKeys, true, HandleHotKey);
+                HotkeyManager.Current.AddOrReplace(TxtTopic.Text + BtnHotKey.Content, key, modKeys, true, HandleHotKey);
             }
             catch (Exception ex)
             {
-                TxtHotKey.Text = "";
+                BtnHotKey.Content = "Set key";
                 MessageBox.Show(ex.Message);
                 Console.WriteLine(ex);
             }
