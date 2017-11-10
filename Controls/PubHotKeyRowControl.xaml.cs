@@ -90,7 +90,7 @@ namespace mqtt_hotkeys_test.Controls
         private static string CleanModifierKeysString(string modKeysString)
         {
             modKeysString = modKeysString.Replace("Windows", "Win");
-            modKeysString = modKeysString.Replace(",", " +");
+            modKeysString = modKeysString.Replace(",", "+");
             return modKeysString;
         }
 
@@ -99,6 +99,8 @@ namespace mqtt_hotkeys_test.Controls
             try
             {
                 HotkeyManager.Current.AddOrReplace(TxtTopic.Text + BtnHotKey.Content, key, modKeys, true, HandleHotKey);
+                BtnHotKey.FontSize = 16;
+
             }
             catch (Exception ex)
             {

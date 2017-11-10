@@ -70,6 +70,27 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <Style x:Key="BtnPubSub" TargetType="{x:Type Button}">
+            <Setter Property="Foreground" Value="{StaticResource Color1}" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Height" Value="25" />
+            <Setter Property="TextElement.FontFamily" Value="Arial"/>
+            <Setter Property="TextElement.FontSize" Value="17" />
+            <Setter Property="BorderThickness" Value="0,0,1,1" />
+            <Setter Property="BorderBrush" Value="{StaticResource Color1}" />
+            <Setter Property="Margin" Value="4,0,0,0" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type Button}">
+                        <Grid>
+                            <Border x:Name="PubSubBtnBorder" CornerRadius="0,0,3,0" Background="Transparent" BorderThickness="{TemplateBinding BorderThickness}" BorderBrush="{TemplateBinding BorderBrush}" >
+                                <ContentPresenter x:Name="MyContentPresenter" Content="{TemplateBinding Content}" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="2,0,0,0"/>
+                            </Border>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
         <Style x:Key="BtnGraphic1" TargetType="{x:Type Button}">
             <Setter Property="Foreground" Value="#FF9000" />
             <Setter Property="Background" Value="Transparent" />

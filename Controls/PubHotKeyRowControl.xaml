@@ -21,22 +21,12 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
 
-        <!--<xctk:WatermarkTextBox Name="TxtHotKey"
-            Style="{DynamicResource TxtBoxPubSub1}"
-            MouseLeftButtonUp="TxtHotKey_OnMouseDoubleClick"
-            Grid.Column="0"
-            Text="Set Hotkey"
-            Cursor="Arrow"
-            BorderThickness="0,0,1,1"
-            Margin="3"
-            IsReadOnly="True" />-->
-        
         <Button
             Name="BtnHotKey"
+            Style="{DynamicResource BtnPubSub}"
             Click="BtnHotKey_OnClick"
             Cursor="Arrow"
             Content="Set key"
-            BorderThickness="0,0,1,1"
             Grid.Column="0"
             Grid.Row="0"
             Margin="3,3,10,3"/>
