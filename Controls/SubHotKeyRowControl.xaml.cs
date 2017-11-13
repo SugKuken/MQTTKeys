@@ -65,7 +65,6 @@ namespace mqtt_hotkeys_test.Controls
                             }
                         }
                         BtnHotKey.Content = $"{modKeysString} + {keyLtr}";
-                        //SetUpKeyPress(keyLtr, modifierKeys);
                     }
                     // Resub if loaded from config
                     BtnSub_OnClick(this, null);
@@ -109,58 +108,6 @@ namespace mqtt_hotkeys_test.Controls
             };
 
             Windows.MainWindow.AddMqttSub(SubHelper);
-
-
-            //MainWindow._mqttClient.Unsubscribe(MainWindow.MqttTopics.Select(x => x.Topic).ToArray());
-
-            //MainWindow._mqttClient.Subscribe(MainWindow.MqttTopics.Select(x=>x.Topic).ToArray(), 
-            //                                 MainWindow.MqttTopics.Select(x=>x.QosLevel).ToArray());
-
-            // TODO: Do this on init instead of per control? (Move to MainWindow.xaml.cs?)
-            //MainWindow._mqttClient.MqttMsgPublishReceived += _mqttClient_MqttMsgPublishReceived;
-
-        }
-
-        //TODO: Move to MainWindow.xaml.cs? (DONE, testing)
-        private void _mqttClient_MqttMsgPublishReceived(object sender, uPLibrary.Networking.M2Mqtt.Messages.MqttMsgPublishEventArgs e)
-        {
-            // TODO: Figure out why this fires multiple times?
-            this.Dispatcher.Invoke(() =>
-            {
-                //if (MainWindow.AllHotKeys.Any(Keyboard.IsKeyDown))
-                //{
-                //    Console.WriteLine("Key is still pressed, ignoring");
-                //    return;
-                //}
-                if (e.Topic == TxtTopic.Text && 
-                    !e.DupFlag && 
-                    Encoding.UTF8.GetString(e.Message) == TxtTrigger.Text)
-                {
-                    Console.WriteLine($"Message received on topic [{e.Topic}]: {Encoding.UTF8.GetString(e.Message)}\n" +
-                                      $"DupFlag: {e.DupFlag}\n" +
-                                      $"QoS: {e.QosLevel}");
-
-                    VirtualKeyCode vKey = (VirtualKeyCode) KeyInterop.VirtualKeyFromKey(HotKey);
-                    // Handle and press hotkey
-                    var keyCodes = new List<VirtualKeyCode> {vKey};
-
-                    new InputSimulator().Keyboard.ModifiedKeyStroke(ModifierKeys, keyCodes);
-                    if (TxtReplyPayload.Text.Trim() != "")
-                    {
-                        if (string.Equals(TxtTrigger.Text, TxtReplyPayload.Text,
-                            StringComparison.InvariantCultureIgnoreCase))
-                        {
-                            MessageBox.Show("Reply payload and trigger payload cannot be the same!");
-                            return;
-                        }
-                        var topic = TxtReplyTopic.Text.Trim() == "" ? TxtTopic.Text.Trim() : TxtReplyTopic.Text.Trim();
-                        Windows.MainWindow.MqttClient.Publish(topic,
-                            Encoding.UTF8.GetBytes(TxtReplyPayload.Text),
-                            byte.Parse(TxtQos.Text),
-                            false);
-                    }
-                }
-            });
         }
 
         private void BtnHotKey_OnClick(object sender, RoutedEventArgs routedEventArgs)
@@ -213,39 +160,6 @@ namespace mqtt_hotkeys_test.Controls
             return modKeysString;
         }
 
-        //private void SetUpKeyPress(Key key, ModifierKeys modKeys)
-        //{
-        //    try
-        //    {
-        //        // TODO handler
-
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        TxtHotKey.Text = "Double click to set key";
-        //        MessageBox.Show(ex.Message);
-        //        Console.WriteLine(ex);
-        //    }
-        //}
-
-        private void HandleHotKey(object sender, HotkeyEventArgs e)
-        {
-            PublishMqttMessage();
-        }
-
-        private void PublishMqttMessage()
-        {
-            if (TxtReplyPayload.Text == "" || TxtTopic.Text == "")
-            {
-                MessageBox.Show("Topic or message cannot be blank", "Invalid selections", MessageBoxButton.OK);
-                return;
-            }
-            Windows.MainWindow.MqttClient.Publish(TxtTopic.Text,
-                       Encoding.UTF8.GetBytes(TxtReplyPayload.Text),
-                       byte.Parse(TxtQos.Text),
-                       false);
-        }
-
         public Point mouseStartPos;
         public Point mouseEndPos;
 
@@ -258,7 +172,6 @@ namespace mqtt_hotkeys_test.Controls
         {
 
         }
-
 
         private void BtnRemoveHotkey_OnClick(object sender, RoutedEventArgs e)
         {

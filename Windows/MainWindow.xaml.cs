@@ -80,6 +80,7 @@ namespace mqtt_hotkeys_test.Windows
                 catch (Exception ex)
                 {
                     Console.WriteLine(ex);
+                    // TODO: Change all MessageBoxes to custom popup
                     MessageBox.Show(ex.Message);
                     _isIpConfigured = false;
                 }
@@ -134,7 +135,6 @@ namespace mqtt_hotkeys_test.Windows
         {
             if (File.Exists("connectionconfig.json"))
             {
-                //TODO: If connectionconfig.json is empty, delete and reconfigure (Solved? Testing)
                 var connectionConfig =
                     JsonConvert.DeserializeObject<ConnectionSettings>(File.ReadAllText("connectionconfig.json"));
 
@@ -212,6 +212,7 @@ namespace mqtt_hotkeys_test.Windows
             }
             catch (Exception ex)
             {
+                // TODO: Change all MessageBoxes to custom popup
                 MessageBox.Show(ex.Message);
                 Console.WriteLine(ex);
             }
@@ -274,11 +275,6 @@ namespace mqtt_hotkeys_test.Windows
 
         private void BtnAddHotKey_OnClick(object sender, RoutedEventArgs e)
         {
-            // TODO: keep it like this?
-            //if (MainStackPanel.Children.OfType<PubHotKeyRowControl>().Last().TxtMessage.Text == "" ||
-            //    MainStackPanel.Children.OfType<PubHotKeyRowControl>().Last().TxtTopic.Text == "")
-            //    return;
-            Console.WriteLine(TabControlMainWindow.SelectedIndex);
             if (TabControlMainWindow.SelectedIndex == 0)
             {
                 var rowControl = new PubHotKeyRowControl();
@@ -294,6 +290,7 @@ namespace mqtt_hotkeys_test.Windows
 
         private void MenuItemResetBinds_OnClick(object sender, RoutedEventArgs e)
         {
+            // TODO: Change all MessageBoxes to custom popup
             var mbox = MessageBox.Show("Are you sure?", "Delete", MessageBoxButton.YesNo);
             if (mbox != MessageBoxResult.Yes) return;
 
@@ -309,6 +306,7 @@ namespace mqtt_hotkeys_test.Windows
 
         private void MenuItemSaveConfig_OnClick(object sender, RoutedEventArgs e)
         {
+            // TODO: Change all MessageBoxes to custom popup
             var mbox = MessageBox.Show("Are you sure?\nThis will overwrite and previous binding configs.", "Delete",
                 MessageBoxButton.YesNo);
             if (mbox != MessageBoxResult.Yes) return;
@@ -365,7 +363,7 @@ namespace mqtt_hotkeys_test.Windows
                         Console.WriteLine(subBindingModifierKey.ToString());
                     }
                     Console.WriteLine(keyCodes.FirstOrDefault());
-                    // TODO: When firing mqtt from keystroke, it will continually retrigger. find possible fix?
+                    // TODO: When firing mqtt from keystroke, it will continually retrigger. (Potentially fixed?)
                     new InputSimulator().Keyboard.ModifiedKeyStroke(subBinding.modifierKeys, keyCodes);
 
 
@@ -374,6 +372,7 @@ namespace mqtt_hotkeys_test.Windows
                         if (string.Equals(subBinding.TriggerMessage, subBinding.ReplyMessage,
                             StringComparison.InvariantCultureIgnoreCase))
                         {
+                            // TODO: Change all MessageBoxes to custom popup
                             MessageBox.Show("Reply payload and trigger payload cannot be the same!");
                             return;
                         }
